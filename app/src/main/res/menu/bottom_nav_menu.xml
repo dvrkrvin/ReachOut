@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/miHome"
+        android:title="Home"
+        android:icon="@drawable/ic_home"/>
+
+    <item
+        android:id="@+id/miSetup"
+        android:title="Setup"
+        android:icon="@drawable/ic_people"/>
+
+    <item
+        android:id="@+id/placeholder"
+        android:title=""
+        android:enabled="false"/>
+
+    <item
+        android:id="@+id/miResources"
+        android:title="Resources"
+        android:icon="@drawable/ic_layers"/>
+
+    <item
+        android:id="@+id/miHelp"
+        android:title="Help"
+        android:icon="@drawable/ic_emergency"/>
+</menu>

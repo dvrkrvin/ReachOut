@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/navigation_home">
+
+    <fragment
+        android:id="@+id/navigation_home"
+        android:name="com.lincolnstewart.android.reachout.ui.home.HomeFragment"
+        android:label="@string/title_home"
+        tools:layout="@layout/fragment_home" />
+
+    <fragment
+        android:id="@+id/navigation_setup"
+        android:name="com.lincolnstewart.android.reachout.ui.setup.SetupFragment"
+        android:label="@string/title_setup"
+        tools:layout="@layout/fragment_setup" />
+
+    <fragment
+        android:id="@+id/navigation_reach"
+        android:name="com.lincolnstewart.android.reachout.ui.reach.ReachFragment"
+        android:label="@string/title_reach"
+        tools:layout="@layout/fragment_reach" />
+
+    <fragment
+        android:id="@+id/navigation_resources"
+        android:name="com.lincolnstewart.android.reachout.ui.resources.ResourcesFragment"
+        android:label="@string/title_resources"
+        tools:layout="@layout/fragment_resources" />
+
+    <fragment
+        android:id="@+id/navigation_help"
+        android:name="com.lincolnstewart.android.reachout.ui.help.HelpFragment"
+        android:label="@string/title_help"
+        tools:layout="@layout/fragment_help" />
+
+</navigation>
