@@ -34,5 +34,15 @@
         android:name="com.lincolnstewart.android.reachout.ui.help.HelpFragment"
         android:label="@string/title_help"
         tools:layout="@layout/fragment_help" />
+    <fragment
+        android:id="@+id/childOneFragment"
+        android:name="com.lincolnstewart.android.reachout.ui.setup.tabs.ChildOneFragment"
+        android:label="fragment_child_one"
+        tools:layout="@layout/fragment_child_one" />
+    <fragment
+        android:id="@+id/childTwoFragment"
+        android:name="com.lincolnstewart.android.reachout.ui.setup.tabs.ChildTwoFragment"
+        android:label="fragment_child_two"
+        tools:layout="@layout/fragment_child_two" />
 
 </navigation>
