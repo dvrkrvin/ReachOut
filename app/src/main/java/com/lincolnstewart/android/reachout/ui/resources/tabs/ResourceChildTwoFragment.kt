@@ -1,34 +1,31 @@
-package com.lincolnstewart.android.reachout.ui.setup.tabs
+package com.lincolnstewart.android.reachout.ui.resources.tabs
 
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.lincolnstewart.android.reachout.R
 
-const val TAG = "ChildOneFragment"
-
-class ChildOneFragment : Fragment() {
+class ResourceChildTwoFragment : Fragment() {
 
     companion object {
-        fun newInstance() = ChildOneFragment()
+        fun newInstance() = ResourceChildTwoFragment()
     }
 
-    private lateinit var viewModel: ChildOneViewModel
+    private lateinit var viewModel: ResourceChildTwoViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_child_one, container, false)
+        return inflater.inflate(R.layout.fragment_resource_child_two, container, false)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(ChildOneViewModel::class.java)
+        viewModel = ViewModelProvider(this).get(ResourceChildTwoViewModel::class.java)
         // TODO: Use the ViewModel
     }
 
