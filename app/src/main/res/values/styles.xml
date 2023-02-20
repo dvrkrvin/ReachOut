@@ -4,4 +4,9 @@
         <item name="android:background">@color/black_overlay</item>
         <item name="android:buttonBarStyle">?android:attr/buttonBarStyle</item>
     </style>
+
+    <style name="ListItem" parent="TextAppearance.MaterialComponents.Subtitle1">
+        <item name="android:textColor">@android:color/background_dark</item>
+        <item name="android:textStyle">bold</item>
+    </style>
 </resources>

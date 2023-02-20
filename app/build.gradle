@@ -32,6 +32,7 @@ android {
     }
     buildFeatures {
         viewBinding true
+        compose true
     }
 }
 
@@ -52,5 +53,13 @@ dependencies {
 
     // Material design
     implementation 'com.google.android.material:material:1.9.0-alpha01'
+
+    // Lazy column ... not working
+    implementation 'androidx.compose.foundation:foundation:1.1.1'
+    implementation 'androidx.compose.runtime:runtime:1.1.1'
+    implementation 'androidx.compose.ui:ui:1.1.1'
+    implementation 'androidx.compose.ui:ui-tooling:1.1.1'
+    implementation 'androidx.compose.material:material:1.1.1'
+    implementation 'androidx.activity:activity-compose:1.4.0'
 
 }

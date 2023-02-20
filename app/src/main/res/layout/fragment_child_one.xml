@@ -12,4 +12,9 @@
         android:gravity="center"
         android:textSize="70dp"/>
 
+    <androidx.compose.ui.platform.ComposeView
+        android:id="@+id/compose_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
 </FrameLayout>
