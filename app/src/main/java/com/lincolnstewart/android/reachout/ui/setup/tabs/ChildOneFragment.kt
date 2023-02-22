@@ -34,36 +34,24 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.sp
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.viewModels
+import androidx.navigation.NavController
+import androidx.navigation.NavOptions
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.fragment.findNavController
 import com.lincolnstewart.android.reachout.databinding.FragmentChildOneBinding
 import com.lincolnstewart.android.reachout.model.Contact
 
 const val TAG = "ChildOneFragment"
 
-//TODO: Fix application crashing if Contact has an empty data member
-var importedContacts = mutableListOf<Contact>()
-
-val testContacts = mutableListOf(
-    Contact("Alice Dave", "123-456-7890", ""),
-    Contact("Barrett Johann", "123-456-1234", ""),
-    Contact("Charlie Brown",  "345-678-9012", ""),
-    Contact("Dave Fill",  "456-789-0123", ""),
-    Contact("Eve Sert",  "567-890-1234", ""),
-    Contact("Frank Gora",  "678-901-2345", ""),
-    Contact("Grace Tree",  "789-012-3456", ""),
-    Contact("Julia Bell", "012-345-6789", ""),
-    Contact("Julia Bell", "012-345-6789", ""),
-    Contact("Barrett Flip", "123-456-1234", ""),
-    Contact("Charlie Joe",  "345-678-9012", ""),
-    Contact("Dave Davidson",  "456-789-0123", ""),
-    Contact("Dave Moore", "456-789-0123", ""),
-    Contact("Eve Tea",  "567-890-1234", ""),
-    Contact("Frank Strog",  "678-901-2345", "")
-)
-
 class ChildOneFragment : Fragment() {
 
     private var _binding: FragmentChildOneBinding? = null
     private val binding get() = _binding!!
+
+    private lateinit var navController: NavController
+
+    private val childOneViewModel: ChildOneViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -76,11 +64,18 @@ class ChildOneFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+//        val navHostFragment = childFragmentManager.findFragmentById(R.id.navigation_setup) as NavHostFragment
+        navController = findNavController()
+        navController.setGraph(R.navigation.mobile_navigation)
+
+        binding.contactFab.setOnClickListener {
+            onContactFabClicked()
+        }
         // Request permission to read contacts
         requestPermission()
         // Set contacts? into recycler view
         setRecyclerViewContent()
-
     }
 
     override fun onDestroyView() {
@@ -106,9 +101,9 @@ class ChildOneFragment : Fragment() {
                 Manifest.permission.READ_CONTACTS
             ) == PackageManager.PERMISSION_GRANTED -> {
                 // permission granted
-                val contactsList = readContacts(requireContext())
+                val contactsList = childOneViewModel.readContacts(requireContext())
                 Log.d(TAG, "Contacts received: ${contactsList.count()}")
-                importedContacts = contactsList
+                childOneViewModel.importedContacts = contactsList
             }
             ActivityCompat.shouldShowRequestPermissionRationale(
                 requireActivity(),
@@ -123,72 +118,34 @@ class ChildOneFragment : Fragment() {
         }
     }
 
-    //TODO: Move this function to the viewModel
-    private fun readContacts(context: Context): ArrayList<Contact> {
-        val contactsList = ArrayList<Contact>()
-        val contentResolver = context.contentResolver
-        val projection = arrayOf(
-            ContactsContract.Contacts._ID,
-            ContactsContract.Contacts.DISPLAY_NAME,
-            ContactsContract.Contacts.HAS_PHONE_NUMBER,
-            ContactsContract.Contacts.PHOTO_THUMBNAIL_URI
-        )
-        val sortOrder = "${ContactsContract.Contacts.DISPLAY_NAME} ASC"
-        val selection = "${ContactsContract.Contacts.HAS_PHONE_NUMBER} > 0"
-
-        contentResolver.query(
-            ContactsContract.Contacts.CONTENT_URI,
-            projection,
-            selection,
-            null,
-            sortOrder
-        )?.use { cursor ->
-            if (cursor.moveToFirst()) {
-                do {
-                    val contactId = cursor.getLong(cursor.getColumnIndex(ContactsContract.Contacts._ID))
-                    val displayName = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME))
-                    val hasPhoneNumber = cursor.getInt(cursor.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER))
-                    val thumbnailUri = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.PHOTO_THUMBNAIL_URI))
-
-                    if (hasPhoneNumber > 0) {
-                        val phoneNumberProjection = arrayOf(ContactsContract.CommonDataKinds.Phone.NUMBER)
-                        val phoneNumberSelection = "${ContactsContract.CommonDataKinds.Phone.CONTACT_ID} = ?"
-                        val phoneNumberSelectionArgs = arrayOf(contactId.toString())
-                        val phoneNumberCursor = contentResolver.query(
-                            ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
-                            phoneNumberProjection,
-                            phoneNumberSelection,
-                            phoneNumberSelectionArgs,
-                            null
-                        )
-                        phoneNumberCursor?.use { phoneCursor ->
-                            if (phoneCursor.moveToFirst()) {
-                                val phoneNumber = phoneCursor.getString(phoneCursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER))
-                                val contact = Contact(displayName = displayName, number = phoneNumber, imageSrc = thumbnailUri ?: "")
-                                contactsList.add(contact)
-                            }
-                        }
-                    } else {
-                        continue
-                    }
-                } while (cursor.moveToNext())
-            }
-        }
-        return contactsList
-    }
-    
     // TODO: Display an empty RecyclerView if we have not received access or contacts
     // If we have been given access and received contacts, set them in the RecyclerView,
     // otherwise display our test contacts
     private fun setRecyclerViewContent() {
         val composeView = requireView().findViewById<ComposeView>(R.id.compose_view)
-        if (importedContacts.isNotEmpty()) {
-            composeView.setContent {RecyclerView(importedContacts)}
+        if (childOneViewModel.importedContacts.isNotEmpty()) {
+            composeView.setContent {RecyclerView(childOneViewModel.importedContacts)}
         } else {
-            composeView.setContent {RecyclerView(testContacts)}
+            composeView.setContent {RecyclerView(childOneViewModel.testContacts)}
         }
     }
 
+    private fun onContactFabClicked() {
+        Log.d(TAG, "Contact fab clicked")
+        // TODO: Create and launch a new createContact activity / fragment
+
+        val navController = findNavController()
+        // Fading animation for now, may replace with explosion later.
+        val options = NavOptions.Builder()
+            .setEnterAnim(R.anim.fade_in)
+            .setExitAnim(R.anim.fade_out)
+            .setPopEnterAnim(R.anim.fade_in)
+            .setPopExitAnim(R.anim.fade_out)
+            .build()
+        navController.navigate(R.id.navigation_add_contact, null, options)
+    }
+
+    // Contact
     @Composable
     fun ListItem(
         circleText: String,
@@ -231,6 +188,7 @@ class ChildOneFragment : Fragment() {
         }
     }
 
+    // Contacts list
     @OptIn(ExperimentalFoundationApi::class)
     @Composable
     fun RecyclerView(contacts: List<Contact>) {
@@ -273,9 +231,8 @@ class ChildOneFragment : Fragment() {
     @Preview(showBackground = true)
     @Composable
     fun DefaultPreview() {
-        RecyclerView(testContacts)
+        RecyclerView(childOneViewModel.testContacts)
     }
-
 }
 
 // List item from tutorial, holding onto for reference

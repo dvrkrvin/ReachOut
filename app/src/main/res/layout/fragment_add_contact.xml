@@ -3,13 +3,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.help.HelpFragment">
+    tools:context=".ui.setup.tabs.AddContactFragment">
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
-        android:textSize="30dp"
-        android:text="Help fragment" />
+        android:textSize="35dp"
+        android:text="Add Contact fragment" />
 
 </FrameLayout>
