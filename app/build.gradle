@@ -1,6 +1,7 @@
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
+    id 'androidx.navigation.safeargs'
 }
 
 android {
@@ -66,5 +67,8 @@ dependencies {
 
     // For rememberImagePainter
     implementation("io.coil-kt:coil-compose:1.4.0")
+
+    // For passing Contact objects
+    implementation 'androidx.core:core-ktx:1.9.0'
 
 }

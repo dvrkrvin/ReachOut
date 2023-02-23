@@ -1,15 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/constraintLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.setup.tabs.AddContactFragment">
 
     <TextView
+        android:id="@+id/addContactTitle"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="128dp"
         android:gravity="center"
+        android:text="Add Contact"
         android:textSize="35dp"
-        android:text="Add Contact fragment" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout_editor_absoluteX="33dp" />
 
-</FrameLayout>
+    <EditText
+        android:id="@+id/editTextPhoneNumber"
+        android:layout_width="210dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="100dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="100dp"
+        android:digits="0123456789-"
+        android:ems="10"
+        android:hint="Phone Number"
+        android:inputType="phone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editTextContactName" />
+
+    <EditText
+        android:id="@+id/editTextContactName"
+        android:layout_width="0dp"
+        android:layout_height="45dp"
+        android:layout_marginStart="100dp"
+        android:layout_marginTop="88dp"
+        android:layout_marginEnd="100dp"
+        android:ems="10"
+        android:hint="Name"
+        android:inputType="textPersonName"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/addContactTitle" />
+
+    <Button
+        android:id="@+id/saveContactButton"
+        android:layout_width="0dp"
+        android:layout_height="71dp"
+        android:layout_marginStart="140dp"
+        android:layout_marginTop="56dp"
+        android:layout_marginEnd="140dp"
+        android:text="Save"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editTextPhoneNumber" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

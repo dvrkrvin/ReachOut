@@ -17,11 +17,7 @@
         android:label="@string/title_setup"
         tools:layout="@layout/fragment_setup"/>
 
-    <fragment
-        android:id="@+id/navigation_add_contact"
-        android:name="com.lincolnstewart.android.reachout.ui.setup.tabs.AddContactFragment"
-        android:label="@string/title_add_contact"
-        tools:layout="@layout/fragment_add_contact" />
+
 
     <fragment
         android:id="@+id/navigation_reach"
@@ -40,31 +36,43 @@
         android:name="com.lincolnstewart.android.reachout.ui.help.HelpFragment"
         android:label="@string/title_help"
         tools:layout="@layout/fragment_help" />
+
+<!--    Setup-Contact List Fragment-->
     <fragment
         android:id="@+id/childOneFragment"
         android:name="com.lincolnstewart.android.reachout.ui.setup.tabs.ChildOneFragment"
         android:label="fragment_child_one"
-        tools:layout="@layout/fragment_child_one" />
+        tools:layout="@layout/fragment_child_one"/>
+
+    <fragment
+        android:id="@+id/navigation_add_contact"
+        android:name="com.lincolnstewart.android.reachout.ui.setup.tabs.AddContactFragment"
+        android:label="@string/title_add_contact"
+        tools:layout="@layout/fragment_add_contact" />
+
+<!--    Setup-Notifications Fragment-->
     <fragment
         android:id="@+id/childTwoFragment"
         android:name="com.lincolnstewart.android.reachout.ui.setup.tabs.ChildTwoFragment"
         android:label="fragment_child_two"
         tools:layout="@layout/fragment_child_two" />
+
     <fragment
         android:id="@+id/resourceChildOneFragment"
         android:name="com.lincolnstewart.android.reachout.ui.resources.tabs.ResourceChildOneFragment"
         android:label="fragment_resource_child_one"
         tools:layout="@layout/fragment_resource_child_one" />
+
     <fragment
         android:id="@+id/resourceChildTwoFragment"
         android:name="com.lincolnstewart.android.reachout.ui.resources.tabs.ResourceChildTwoFragment"
         android:label="fragment_resource_child_two"
         tools:layout="@layout/fragment_resource_child_two" />
+
     <fragment
         android:id="@+id/resourceChildThreeFragment"
         android:name="com.lincolnstewart.android.reachout.ui.resources.tabs.ResourceChildThreeFragment"
         android:label="fragment_resource_child_three"
         tools:layout="@layout/fragment_resource_child_three" />
-
 
 </navigation>

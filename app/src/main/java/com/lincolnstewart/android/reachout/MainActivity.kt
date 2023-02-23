@@ -32,7 +32,7 @@ class MainActivity : AppCompatActivity() {
         navController.setGraph(R.navigation.mobile_navigation)
 
         val bottomNavigationView: BottomNavigationView = findViewById(R.id.bottomNavigationView)
-        bottomNavigationView.setOnNavigationItemSelectedListener { menuItem ->
+        bottomNavigationView.setOnItemSelectedListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.miHome -> {
                     navController.navigate(R.id.navigation_home)
@@ -57,11 +57,17 @@ class MainActivity : AppCompatActivity() {
                 else -> false
             }
         }
+
+        val navListener = NavController.OnDestinationChangedListener { _, destination, _ ->
+            bottomNavigationView.menu.findItem(destination.id)?.isChecked = true
+        }
+        navController.addOnDestinationChangedListener(navListener)
     }
 
     private fun reachOut() {
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottomNavigationView)
 //        bottomNavigationView.clearCheck()
+        bottomNavigationView.menu.findItem(R.id.placeholder)?.isChecked = true
         navController.navigate(R.id.navigation_reach)
     }
 }

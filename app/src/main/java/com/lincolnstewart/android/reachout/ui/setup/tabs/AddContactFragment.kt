@@ -1,23 +1,26 @@
 package com.lincolnstewart.android.reachout.ui.setup.tabs
 
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
-import androidx.fragment.app.Fragment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material.Button
-import androidx.compose.material.OutlinedTextField
-import androidx.compose.material.Text
+import android.widget.Toast
 import androidx.compose.runtime.*
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.ComposeView
-import androidx.compose.ui.unit.dp
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.setFragmentResult
+import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import com.lincolnstewart.android.reachout.R
+import com.lincolnstewart.android.reachout.databinding.FragmentAddContactBinding
+import com.lincolnstewart.android.reachout.model.Contact
+
+private const val TAG = "AddContactFragment"
 
 class AddContactFragment : Fragment() {
+
+    private var _binding: FragmentAddContactBinding? = null
+    private val binding get() = _binding!!
 
     companion object {
         fun newInstance() = AddContactFragment()
@@ -30,7 +33,9 @@ class AddContactFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // For conventional xml
-        return inflater.inflate(R.layout.fragment_add_contact, container, false)
+//        return inflater.inflate(R.layout.fragment_add_contact, container, false)
+        _binding = FragmentAddContactBinding.inflate(inflater, container, false)
+        return binding.root
 
         // For composable
 //        return ComposeView(requireContext()).apply {
@@ -40,10 +45,32 @@ class AddContactFragment : Fragment() {
 //        }
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        binding.saveContactButton.setOnClickListener { saveContactOnClicked() }
+    }
+
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this).get(AddContactViewModel::class.java)
         // TODO: Use the ViewModel
+    }
+
+    private fun saveContactOnClicked() {
+        Log.d(TAG, "Save contact clicked")
+
+        // Create mew Contact
+//        val name = binding.editTextContactName.toString()
+//        val phoneNumber = binding.editTextPhoneNumber.toString()
+//        val newContact = Contact(name, phoneNumber)
+
+        // Confirmation toast or similar
+        Toast.makeText(binding.root.context, "Contact Added", Toast.LENGTH_SHORT).show()
+
+        // Pass new Contact to ChildOneFragment
+
+        // Dismiss this fragment
+        findNavController().popBackStack()
     }
 
 //    @Composable

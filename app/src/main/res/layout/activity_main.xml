@@ -19,6 +19,7 @@
             android:layout_height="match_parent"
             android:layout_marginEnd="16dp"
             android:background="@android:color/transparent"
+            android:layout_alignParentBottom="true"
             app:menu="@menu/bottom_nav_menu"
             app:labelVisibilityMode="labeled"
             app:elevation="0dp" />

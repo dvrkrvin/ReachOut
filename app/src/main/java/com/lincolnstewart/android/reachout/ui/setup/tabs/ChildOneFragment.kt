@@ -42,7 +42,7 @@ import androidx.navigation.fragment.findNavController
 import com.lincolnstewart.android.reachout.databinding.FragmentChildOneBinding
 import com.lincolnstewart.android.reachout.model.Contact
 
-const val TAG = "ChildOneFragment"
+private const val TAG = "ChildOneFragment"
 
 class ChildOneFragment : Fragment() {
 
