@@ -1,7 +1,11 @@
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
-    id 'androidx.navigation.safeargs'
+
+    // For Rooms
+    id 'org.jetbrains.kotlin.kapt'
+
+//    id 'androidx.navigation.safeargs'
 }
 
 android {
@@ -68,7 +72,17 @@ dependencies {
     // For rememberImagePainter
     implementation("io.coil-kt:coil-compose:1.4.0")
 
+    // For asynchronous operations
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4'
+    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.5.1'
+
+    // For Rooms
+    implementation 'androidx.room:room-runtime:2.5.0'
+    implementation 'androidx.room:room-ktx:2.5.0'
+    kapt 'androidx.room:room-compiler:2.5.0'
+
     // For passing Contact objects
-    implementation 'androidx.core:core-ktx:1.9.0'
+//    implementation 'androidx.core:core-ktx:1.9.0'
 
 }

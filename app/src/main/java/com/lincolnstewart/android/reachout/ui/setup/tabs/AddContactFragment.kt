@@ -14,6 +14,7 @@ import androidx.navigation.fragment.findNavController
 import com.lincolnstewart.android.reachout.R
 import com.lincolnstewart.android.reachout.databinding.FragmentAddContactBinding
 import com.lincolnstewart.android.reachout.model.Contact
+import java.util.*
 
 private const val TAG = "AddContactFragment"
 
@@ -26,7 +27,7 @@ class AddContactFragment : Fragment() {
         fun newInstance() = AddContactFragment()
     }
 
-    private lateinit var viewModel: AddContactViewModel
+    private lateinit var viewModel: ChildOneViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -52,7 +53,7 @@ class AddContactFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(AddContactViewModel::class.java)
+        viewModel = ViewModelProvider(this).get(ChildOneViewModel::class.java)
         // TODO: Use the ViewModel
     }
 
@@ -60,14 +61,19 @@ class AddContactFragment : Fragment() {
         Log.d(TAG, "Save contact clicked")
 
         // Create mew Contact
-//        val name = binding.editTextContactName.toString()
-//        val phoneNumber = binding.editTextPhoneNumber.toString()
-//        val newContact = Contact(name, phoneNumber)
+        val uuid = UUID.randomUUID()
+        val name = binding.editTextContactName.text.toString()
+        val phoneNumber = binding.editTextPhoneNumber.text.toString()
+        val newContact = Contact(uuid, name, phoneNumber)
+
+        Log.d(TAG, "New contact details: $name, $phoneNumber")
+
+
+        // Add the contact
+        viewModel.addContact(newContact)
 
         // Confirmation toast or similar
         Toast.makeText(binding.root.context, "Contact Added", Toast.LENGTH_SHORT).show()
-
-        // Pass new Contact to ChildOneFragment
 
         // Dismiss this fragment
         findNavController().popBackStack()

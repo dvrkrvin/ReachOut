@@ -35,12 +35,21 @@ import androidx.compose.ui.unit.sp
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.NavController
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
+import com.lincolnstewart.android.reachout.ContactRepository
+import com.lincolnstewart.android.reachout.database.ContactDao
 import com.lincolnstewart.android.reachout.databinding.FragmentChildOneBinding
 import com.lincolnstewart.android.reachout.model.Contact
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 private const val TAG = "ChildOneFragment"
 
@@ -75,6 +84,13 @@ class ChildOneFragment : Fragment() {
         // Request permission to read contacts
         requestPermission()
         // Set contacts? into recycler view
+//        setRecyclerViewContent()
+    }
+
+    override fun onResume() {
+        super.onResume()
+//        Log.d(TAG, childOneViewModel.testContacts.toString())
+
         setRecyclerViewContent()
     }
 
@@ -102,7 +118,7 @@ class ChildOneFragment : Fragment() {
             ) == PackageManager.PERMISSION_GRANTED -> {
                 // permission granted
                 val contactsList = childOneViewModel.readContacts(requireContext())
-                Log.d(TAG, "Contacts received: ${contactsList.count()}")
+                Log.d(TAG, "Contacts received from phone: ${contactsList.count()}")
                 childOneViewModel.importedContacts = contactsList
             }
             ActivityCompat.shouldShowRequestPermissionRationale(
@@ -124,15 +140,21 @@ class ChildOneFragment : Fragment() {
     private fun setRecyclerViewContent() {
         val composeView = requireView().findViewById<ComposeView>(R.id.compose_view)
         if (childOneViewModel.importedContacts.isNotEmpty()) {
-            composeView.setContent {RecyclerView(childOneViewModel.importedContacts)}
+            composeView.setContent { RecyclerView(childOneViewModel.importedContacts) }
         } else {
-            composeView.setContent {RecyclerView(childOneViewModel.testContacts)}
+            // Load the contacts from the Room ContactDatabase
+            lifecycleScope.launch {
+                val contacts = withContext(Dispatchers.IO) {
+                    childOneViewModel.loadContacts()
+                }
+                composeView.setContent { RecyclerView(contacts) }
+                Log.d(TAG, contacts.toString())
+            }
         }
     }
 
     private fun onContactFabClicked() {
         Log.d(TAG, "Contact fab clicked")
-        // TODO: Create and launch a new createContact activity / fragment
 
         val navController = findNavController()
         // Fading animation for now, may replace with explosion later.
@@ -231,7 +253,7 @@ class ChildOneFragment : Fragment() {
     @Preview(showBackground = true)
     @Composable
     fun DefaultPreview() {
-        RecyclerView(childOneViewModel.testContacts)
+//        RecyclerView(childOneViewModel.testContacts)
     }
 }
 
