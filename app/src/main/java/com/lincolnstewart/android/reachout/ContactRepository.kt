@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.room.Room
 import com.lincolnstewart.android.reachout.database.ContactDatabase
 import com.lincolnstewart.android.reachout.model.Contact
+import java.util.*
 
 private const val DATABASE_NAME = "contact-database"
 
@@ -21,6 +22,10 @@ class ContactRepository private constructor(context: Context) {
 
     suspend fun addContact(contact: Contact) {
         database.contactDao().addContact(contact)
+    }
+
+    suspend fun removeSelectedContacts(selectedContactUUIDList: List<UUID>) {
+        database.contactDao().deleteContactsById(selectedContactUUIDList)
     }
 
 //    suspend fun getContact(id: UUID): Crime = database.crimeDao().getCrime(id)

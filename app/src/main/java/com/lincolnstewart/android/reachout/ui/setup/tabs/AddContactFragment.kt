@@ -16,6 +16,8 @@ import com.lincolnstewart.android.reachout.databinding.FragmentAddContactBinding
 import com.lincolnstewart.android.reachout.model.Contact
 import java.util.*
 
+// TODO: VALIDATE INPUT DATA, CURRENTLY CRASHING WHEN SAVE BUTTON IS HIT WITH EMPTY FIELDS
+
 private const val TAG = "AddContactFragment"
 
 class AddContactFragment : Fragment() {
@@ -51,10 +53,10 @@ class AddContactFragment : Fragment() {
         binding.saveContactButton.setOnClickListener { saveContactOnClicked() }
     }
 
+    //TODO: Delete this method and assign viewModel variable elsewhere
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this).get(ChildOneViewModel::class.java)
-        // TODO: Use the ViewModel
     }
 
     private fun saveContactOnClicked() {
@@ -67,7 +69,6 @@ class AddContactFragment : Fragment() {
         val newContact = Contact(uuid, name, phoneNumber)
 
         Log.d(TAG, "New contact details: $name, $phoneNumber")
-
 
         // Add the contact
         viewModel.addContact(newContact)

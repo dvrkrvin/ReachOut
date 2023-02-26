@@ -3,11 +3,14 @@ package com.lincolnstewart.android.reachout.ui.setup.tabs
 import android.content.Context
 import android.provider.ContactsContract
 import android.util.Log
+import androidx.compose.runtime.mutableStateMapOf
+import androidx.compose.runtime.remember
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.Navigation.findNavController
 import com.lincolnstewart.android.reachout.ContactRepository
 import com.lincolnstewart.android.reachout.model.Contact
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.util.UUID
 import kotlin.math.log
@@ -110,11 +113,21 @@ class ChildOneViewModel : ViewModel() {
         }
     }
 
+    fun removeContacts(selectedContactUUIDList: List<UUID>) {
+        viewModelScope.launch {
+            repoRemoveContact(selectedContactUUIDList)
+        }
+    }
+
     suspend fun loadContacts(): List<Contact> {
         return contactRepository.getContacts()
     }
 
     private suspend fun repoAddContact(contact: Contact) {
         contactRepository.addContact(contact)
+    }
+
+    private suspend fun repoRemoveContact(selectedContactUUIDList: List<UUID>) {
+        contactRepository.removeSelectedContacts(selectedContactUUIDList)
     }
 }
