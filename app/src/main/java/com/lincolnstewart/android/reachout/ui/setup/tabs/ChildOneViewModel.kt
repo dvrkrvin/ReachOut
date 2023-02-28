@@ -22,7 +22,14 @@ class ChildOneViewModel : ViewModel() {
     private val contactRepository = ContactRepository.get()
 
     //TODO: Fix application crashing if Contact has an empty data member
+
+    // This is the main contact list which is fed by either a users imported contacts or contacts
+    // saved to their room database.
+//    val contactList = mutableListOf<Contact>()
+
     var importedContacts = mutableListOf<Contact>()
+
+    val selectedContacts = mutableMapOf<UUID, Boolean>()
 
 //    val testContacts = mutableListOf(
 //        Contact("Alice Dave", "123-456-7890"),
@@ -113,7 +120,15 @@ class ChildOneViewModel : ViewModel() {
         }
     }
 
-    fun removeContacts(selectedContactUUIDList: List<UUID>) {
+    fun addContacts(contactList: List<Contact>) {
+        Log.d(TAG, "${contactList.count()} contacts about to be added")
+
+        viewModelScope.launch {
+            repoAddContacts(contactList)
+        }
+    }
+
+    suspend fun removeContacts(selectedContactUUIDList: List<UUID>) {
         viewModelScope.launch {
             repoRemoveContact(selectedContactUUIDList)
         }
@@ -125,6 +140,10 @@ class ChildOneViewModel : ViewModel() {
 
     private suspend fun repoAddContact(contact: Contact) {
         contactRepository.addContact(contact)
+    }
+
+    private suspend fun repoAddContacts(contactList: List<Contact>) {
+        contactRepository.addContacts(contactList)
     }
 
     private suspend fun repoRemoveContact(selectedContactUUIDList: List<UUID>) {

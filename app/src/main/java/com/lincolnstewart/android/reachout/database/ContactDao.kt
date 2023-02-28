@@ -1,9 +1,6 @@
 package com.lincolnstewart.android.reachout.database
 
-import androidx.room.Dao
-import androidx.room.Delete
-import androidx.room.Insert
-import androidx.room.Query
+import androidx.room.*
 import com.lincolnstewart.android.reachout.model.Contact
 import java.util.*
 
@@ -15,6 +12,9 @@ interface ContactDao {
 
     @Insert
     suspend fun addContact(contact: Contact)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun addContacts(contactList: List<Contact>)
 
     @Query("DELETE FROM contact WHERE id IN (:idList)")
     suspend fun deleteContactsById(idList: List<UUID>)

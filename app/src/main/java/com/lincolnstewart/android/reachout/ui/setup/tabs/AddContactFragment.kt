@@ -16,8 +16,6 @@ import com.lincolnstewart.android.reachout.databinding.FragmentAddContactBinding
 import com.lincolnstewart.android.reachout.model.Contact
 import java.util.*
 
-// TODO: VALIDATE INPUT DATA, CURRENTLY CRASHING WHEN SAVE BUTTON IS HIT WITH EMPTY FIELDS
-
 private const val TAG = "AddContactFragment"
 
 class AddContactFragment : Fragment() {
@@ -66,18 +64,23 @@ class AddContactFragment : Fragment() {
         val uuid = UUID.randomUUID()
         val name = binding.editTextContactName.text.toString()
         val phoneNumber = binding.editTextPhoneNumber.text.toString()
-        val newContact = Contact(uuid, name, phoneNumber)
 
-        Log.d(TAG, "New contact details: $name, $phoneNumber")
+        if (name.isNotEmpty() && phoneNumber.isNotEmpty()) {
+            val newContact = Contact(uuid, name, phoneNumber)
 
-        // Add the contact
-        viewModel.addContact(newContact)
+            Log.d(TAG, "New contact details: $name, $phoneNumber")
 
-        // Confirmation toast or similar
-        Toast.makeText(binding.root.context, "Contact Added", Toast.LENGTH_SHORT).show()
+            // Add the contact
+            viewModel.addContact(newContact)
 
-        // Dismiss this fragment
-        findNavController().popBackStack()
+            // Confirmation toast or similar
+            Toast.makeText(binding.root.context, "Contact Added", Toast.LENGTH_SHORT).show()
+
+            // Dismiss this fragment
+            findNavController().popBackStack()
+        } else {
+            Log.d(TAG, "Empty value received, prompt user to fill all fields")
+        }
     }
 
 //    @Composable

@@ -24,6 +24,10 @@ class ContactRepository private constructor(context: Context) {
         database.contactDao().addContact(contact)
     }
 
+    suspend fun addContacts(contactList: List<Contact>) {
+        database.contactDao().addContacts(contactList)
+    }
+
     suspend fun removeSelectedContacts(selectedContactUUIDList: List<UUID>) {
         database.contactDao().deleteContactsById(selectedContactUUIDList)
     }
