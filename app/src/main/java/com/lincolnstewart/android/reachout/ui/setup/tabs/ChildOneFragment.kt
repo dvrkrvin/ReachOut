@@ -56,10 +56,6 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.collect
 import java.util.UUID
 
-// TODO: Fix bug where selecting and deselecting still results in deselected items being deleted
-// TODO: Toggle delete button back to add button when we have no selected contacts
-// TODO: Use flow state to fix both of these bugs
-
 private const val TAG = "ChildOneFragment"
 
 class ChildOneFragment : Fragment() {
@@ -79,7 +75,7 @@ class ChildOneFragment : Fragment() {
             ActivityResultContracts.RequestPermission()
         ) { isGranted: Boolean ->
             if (isGranted) {
-                Log.i("Permission: ","Granted")
+                readContacts()
             } else {
                 Log.i("Permission: ", "Denied")
             }
@@ -99,7 +95,6 @@ class ChildOneFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-//        val navHostFragment = childFragmentManager.findFragmentById(R.id.navigation_setup) as NavHostFragment
         navController = findNavController()
         navController.setGraph(R.navigation.mobile_navigation)
 
@@ -137,24 +132,14 @@ class ChildOneFragment : Fragment() {
                 requireContext(),
                 Manifest.permission.READ_CONTACTS
             ) == PackageManager.PERMISSION_GRANTED -> {
-
                 // permission granted, read contacts
-                val importedContacts = childOneViewModel.readContacts(requireContext())
-                Log.d(TAG, "Contacts received from phone: ${importedContacts.count()}")
-
-                // Insert all imported contacts into the Rooms database
-                childOneViewModel.addContacts(importedContacts)
-
-                // Set in shared prefs that contacts have been read before
-                val prefs = requireActivity().getPreferences(Context.MODE_PRIVATE)
-                prefs.edit().putBoolean("contacts_read_before", true).apply()
-
+                readContacts()
             }
             ActivityCompat.shouldShowRequestPermissionRationale(
                 requireActivity(),
                 Manifest.permission.READ_CONTACTS
             ) -> {
-                // explain why we need the permission
+                // TODO: Explain why we need the permission
             }
             else -> {
                 // Permission not yet asked, request the permission
@@ -163,7 +148,21 @@ class ChildOneFragment : Fragment() {
         }
     }
 
+    private fun readContacts() {
+        // permission granted, read contacts
+        val importedContacts = childOneViewModel.readContacts(requireContext())
+        Log.d(TAG, "Contacts received from phone: ${importedContacts.count()}")
+
+        // Insert all imported contacts into the Rooms database
+        childOneViewModel.addContacts(importedContacts)
+
+        // Set in shared prefs that contacts have been read before
+        val prefs = requireActivity().getPreferences(Context.MODE_PRIVATE)
+        prefs.edit().putBoolean("contacts_read_before", true).apply()
+    }
+
     private fun setRecyclerViewContent() {
+        // Revert contact FAB back to Add if there are no selected contacts
         if (childOneViewModel.selectedContacts.all{ !it.value } && (binding.addContactFab.visibility != View.VISIBLE)) {
             childOneViewModel.selectedContacts.clear()
             fadeOutView(binding.removeContactFab)
@@ -175,25 +174,12 @@ class ChildOneFragment : Fragment() {
 //            val contacts = withContext(Dispatchers.IO) {
                 childOneViewModel.loadContacts().collect { contacts ->
                     val alphabetizedContacts = contacts.sortedBy { it.displayName[0].uppercaseChar() }
-                    Log.d(TAG, alphabetizedContacts.toString())
+//                    Log.d(TAG, "Alpha'd contacts loaded from rooms: $alphabetizedContacts")
                     composeView.setContent { RecyclerView(alphabetizedContacts, childOneViewModel.selectedContacts) }
 
                 }
         }
 
-//        val composeView = requireView().findViewById<ComposeView>(R.id.compose_view)
-//        if (childOneViewModel.importedContacts.isNotEmpty()) {
-//            composeView.setContent { RecyclerView(childOneViewModel.importedContacts, childOneViewModel.selectedContacts) }
-//        } else {
-//            // Load the contacts from the Room ContactDatabase
-//            lifecycleScope.launch {
-//                val contacts = withContext(Dispatchers.IO) {
-//                    childOneViewModel.loadContacts()
-//                }
-//                composeView.setContent { RecyclerView(contacts, childOneViewModel.selectedContacts) }
-//                Log.d(TAG, contacts.toString())
-//            }
-//        }
     }
     
     private fun onAddContactFabClicked() {
@@ -213,18 +199,11 @@ class ChildOneFragment : Fragment() {
 //        Log.d(TAG, "Selected Contacts: $childOneViewModel.selectedContacts")
 
         lifecycleScope.launch{
-
-            // TODO: Only remove the contacts which have a value of true, or change map to list
             // Remove contacts
-
             val currentlySelectedContacts = childOneViewModel.selectedContacts.filter { it.value }.keys.toList()
             childOneViewModel.removeContacts(currentlySelectedContacts)
 
-            //TODO: REMOVE ME AND FIX THE RACE CONDITION PROPERLY
-            delay(100) // This delay confirms the suspicion of race condition
-
-            // Update view
-//            setRecyclerViewContent()
+            childOneViewModel.selectedContacts.clear()
         }
 
         // Toggle FAB
