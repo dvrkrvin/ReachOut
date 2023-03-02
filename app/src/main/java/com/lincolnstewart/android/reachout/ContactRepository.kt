@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.room.Room
 import com.lincolnstewart.android.reachout.database.ContactDatabase
 import com.lincolnstewart.android.reachout.model.Contact
+import kotlinx.coroutines.flow.Flow
 import java.util.*
 
 private const val DATABASE_NAME = "contact-database"
@@ -18,7 +19,7 @@ class ContactRepository private constructor(context: Context) {
         )
         .build()
 
-    suspend fun getContacts(): List<Contact> = database.contactDao().getContacts()
+    fun getContacts(): Flow<List<Contact>> = database.contactDao().getContacts()
 
     suspend fun addContact(contact: Contact) {
         database.contactDao().addContact(contact)

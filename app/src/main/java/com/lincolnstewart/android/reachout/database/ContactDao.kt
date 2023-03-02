@@ -1,14 +1,16 @@
 package com.lincolnstewart.android.reachout.database
 
+import androidx.lifecycle.LiveData
 import androidx.room.*
 import com.lincolnstewart.android.reachout.model.Contact
+import kotlinx.coroutines.flow.Flow
 import java.util.*
 
 @Dao
 interface ContactDao {
 
     @Query("SELECT * FROM contact")
-    suspend fun getContacts(): List<Contact>
+    fun getContacts(): Flow<List<Contact>>
 
     @Insert
     suspend fun addContact(contact: Contact)

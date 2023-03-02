@@ -3,17 +3,13 @@ package com.lincolnstewart.android.reachout.ui.setup.tabs
 import android.content.Context
 import android.provider.ContactsContract
 import android.util.Log
-import androidx.compose.runtime.mutableStateMapOf
-import androidx.compose.runtime.remember
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.navigation.Navigation.findNavController
 import com.lincolnstewart.android.reachout.ContactRepository
 import com.lincolnstewart.android.reachout.model.Contact
-import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import java.util.UUID
-import kotlin.math.log
 
 private const val TAG = "ChildOneViewModel"
 
@@ -23,31 +19,9 @@ class ChildOneViewModel : ViewModel() {
 
     //TODO: Fix application crashing if Contact has an empty data member
 
-    // This is the main contact list which is fed by either a users imported contacts or contacts
-    // saved to their room database.
-//    val contactList = mutableListOf<Contact>()
-
     var importedContacts = mutableListOf<Contact>()
 
     val selectedContacts = mutableMapOf<UUID, Boolean>()
-
-//    val testContacts = mutableListOf(
-//        Contact("Alice Dave", "123-456-7890"),
-//        Contact("Barrett Johann", "123-456-1234"),
-//        Contact("Charlie Brown",  "345-678-9012"),
-//        Contact("Dave Fill",  "456-789-0123"),
-//        Contact("Eve Sert",  "567-890-1234"),
-//        Contact("Frank Gora",  "678-901-2345"),
-//        Contact("Grace Tree",  "789-012-3456"),
-//        Contact("Julia Bell", "012-345-6789"),
-//        Contact("Julia Bell", "012-345-6789"),
-//        Contact("Barrett Flip", "123-456-1234"),
-//        Contact("Charlie Joe",  "345-678-9012"),
-//        Contact("Dave Davidson",  "456-789-0123"),
-//        Contact("Dave Moore", "456-789-0123"),
-//        Contact("Eve Tea",  "567-890-1234"),
-//        Contact("Frank Strog",  "678-901-2345")
-//    )
 
     // Read contacts from users native contacts list
     fun readContacts(context: Context): ArrayList<Contact> {
@@ -106,10 +80,6 @@ class ChildOneViewModel : ViewModel() {
     }
 
     fun addContact(contact: Contact) {
-//        Log.d(TAG, "$contact about to be added")
-//        testContacts.add(contact)
-//        Log.d(TAG, testContacts.toString())
-
         viewModelScope.launch {
             val newContact = Contact(
                 id = contact.id,
@@ -134,7 +104,7 @@ class ChildOneViewModel : ViewModel() {
         }
     }
 
-    suspend fun loadContacts(): List<Contact> {
+    fun loadContacts(): Flow<List<Contact>> {
         return contactRepository.getContacts()
     }
 

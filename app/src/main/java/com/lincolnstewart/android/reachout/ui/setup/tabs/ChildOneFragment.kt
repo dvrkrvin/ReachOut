@@ -21,6 +21,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.Divider
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
@@ -52,27 +53,18 @@ import com.lincolnstewart.android.reachout.database.ContactDao
 import com.lincolnstewart.android.reachout.databinding.FragmentChildOneBinding
 import com.lincolnstewart.android.reachout.model.Contact
 import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.collect
 import java.util.UUID
 
-//TODO: I am now able to remove the list of selected contacts but the view doesn't
-// always update immediately. This only happens upon first boot of the app and only on delete operation
-// Import contacts also doesn't update immediately anymore. Race condition?
-// TODO: Import contacts only once - DONE
-// TODO: Save imported contacts to room database - DONE
-// TODO: Alphabetize entire list before setting it
+// TODO: Fix bug where selecting and deselecting still results in deselected items being deleted
+// TODO: Toggle delete button back to add button when we have no selected contacts
+// TODO: Use flow state to fix both of these bugs
 
 private const val TAG = "ChildOneFragment"
 
 class ChildOneFragment : Fragment() {
 
     //region Data members
-
-    //TODO: Replace me with a more permanent solution that persists so long as the application is installed
-    // This isn't working because the fragment is destroyed whenever I leave it.
-    // Imported contacts are most likely duplicating because they are repeatedly imported.
-    private var HASIMOPRTEDCONTACTSBEFORE = false
-
-    private lateinit var sharedPreferences: SharedPreferences
     private var contactsReadBefore = false
 
     private var _binding: FragmentChildOneBinding? = null
@@ -92,12 +84,9 @@ class ChildOneFragment : Fragment() {
                 Log.i("Permission: ", "Denied")
             }
         }
-
-
     //endregion
 
     // region Lifecycle Functions
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -130,32 +119,15 @@ class ChildOneFragment : Fragment() {
         if (!contactsReadBefore) {
             requestPermission()
         }
-        // Request permission to read contacts and add any received contacts to Rooms database
-
-//         Load the contacts from the Room ContactDatabase
-//        lifecycleScope.launch {
-//            val loadedContacts = withContext(Dispatchers.IO) {
-//                childOneViewModel.loadContacts()
-//            }
-//            Log.d(TAG, loadedContacts.toString())
-//
-//        }
 
         // Set contacts into recycler view
         setRecyclerViewContent()
-    }
-
-    override fun onResume() {
-        super.onResume()
-//        Log.d(TAG, childOneViewModel.testContacts.toString())
-//        setRecyclerViewContent()
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
-
     // endregion
 
     //region UI Related Functions
@@ -166,19 +138,16 @@ class ChildOneFragment : Fragment() {
                 Manifest.permission.READ_CONTACTS
             ) == PackageManager.PERMISSION_GRANTED -> {
 
-                if (!HASIMOPRTEDCONTACTSBEFORE) {
-                    // permission granted, read contacts
-                    val importedContacts = childOneViewModel.readContacts(requireContext())
-                    Log.d(TAG, "Contacts received from phone: ${importedContacts.count()}")
-                    HASIMOPRTEDCONTACTSBEFORE = true
+                // permission granted, read contacts
+                val importedContacts = childOneViewModel.readContacts(requireContext())
+                Log.d(TAG, "Contacts received from phone: ${importedContacts.count()}")
 
-                    // Insert all imported contacts into the Rooms database
-                    childOneViewModel.addContacts(importedContacts)
+                // Insert all imported contacts into the Rooms database
+                childOneViewModel.addContacts(importedContacts)
 
-                    // Set in shared prefs that contacts have been read before
-                    val prefs = requireActivity().getPreferences(Context.MODE_PRIVATE)
-                    prefs.edit().putBoolean("contacts_read_before", true).apply()
-                }
+                // Set in shared prefs that contacts have been read before
+                val prefs = requireActivity().getPreferences(Context.MODE_PRIVATE)
+                prefs.edit().putBoolean("contacts_read_before", true).apply()
 
             }
             ActivityCompat.shouldShowRequestPermissionRationale(
@@ -194,17 +163,22 @@ class ChildOneFragment : Fragment() {
         }
     }
 
-    // If we have been given access and received contacts, set them in the RecyclerView,
-    // otherwise display our test contacts
-    //TODO: Modify this function to only set the data from a single source of contacts
     private fun setRecyclerViewContent() {
+        if (childOneViewModel.selectedContacts.all{ !it.value } && (binding.addContactFab.visibility != View.VISIBLE)) {
+            childOneViewModel.selectedContacts.clear()
+            fadeOutView(binding.removeContactFab)
+            fadeInView(binding.addContactFab)
+        }
+
         val composeView = requireView().findViewById<ComposeView>(R.id.compose_view)
         lifecycleScope.launch {
-            val contacts = withContext(Dispatchers.IO) {
-                childOneViewModel.loadContacts()
-            }
-            composeView.setContent { RecyclerView(contacts, childOneViewModel.selectedContacts) }
-//            Log.d(TAG, contacts.toString())
+//            val contacts = withContext(Dispatchers.IO) {
+                childOneViewModel.loadContacts().collect { contacts ->
+                    val alphabetizedContacts = contacts.sortedBy { it.displayName[0].uppercaseChar() }
+                    Log.d(TAG, alphabetizedContacts.toString())
+                    composeView.setContent { RecyclerView(alphabetizedContacts, childOneViewModel.selectedContacts) }
+
+                }
         }
 
 //        val composeView = requireView().findViewById<ComposeView>(R.id.compose_view)
@@ -239,8 +213,12 @@ class ChildOneFragment : Fragment() {
 //        Log.d(TAG, "Selected Contacts: $childOneViewModel.selectedContacts")
 
         lifecycleScope.launch{
+
+            // TODO: Only remove the contacts which have a value of true, or change map to list
             // Remove contacts
-            childOneViewModel.removeContacts(childOneViewModel.selectedContacts.keys.toList())
+
+            val currentlySelectedContacts = childOneViewModel.selectedContacts.filter { it.value }.keys.toList()
+            childOneViewModel.removeContacts(currentlySelectedContacts)
 
             //TODO: REMOVE ME AND FIX THE RACE CONDITION PROPERLY
             delay(100) // This delay confirms the suspicion of race condition
@@ -279,7 +257,6 @@ class ChildOneFragment : Fragment() {
     //endregion
 
     //region Composable Functions
-
     // Contact
     @Composable
     fun ListItem(
@@ -328,7 +305,7 @@ class ChildOneFragment : Fragment() {
     fun RecyclerView(contacts: List<Contact>, selectedContacts: MutableMap<UUID, Boolean>) {
         LazyColumn(modifier = Modifier.padding(vertical = 0.dp)) {
             // TODO: Move this to view model
-            val grouped = contacts.groupBy { it.displayName[0] }
+            val grouped = contacts.groupBy { it.displayName[0].uppercaseChar() }
 
             grouped.forEach { (initial, contacts) ->
                 stickyHeader {
@@ -339,14 +316,13 @@ class ChildOneFragment : Fragment() {
                     val isSelected = selectedContacts[contact.id] ?: false
 
                     ListItem(
-                        circleText = contact.displayName.take(1),
+                        circleText = contact.displayName.take(1).uppercase(),
                         text = contact.displayName,
                         modifier = Modifier
                             .fillMaxWidth()
                             .background(if (isSelected) Color.Gray else Color.White)
                             .pointerInput(Unit) {
 
-                                // Hide add button, show delete button
                                 detectTapGestures(
                                     onLongPress = {
                                         // If the user has contacts selected
@@ -361,8 +337,8 @@ class ChildOneFragment : Fragment() {
                                     },
                                     onTap = {
                                         if (selectedContacts.isNotEmpty()) {
-                                            selectedContacts[contact.id] = !(selectedContacts[contact.id] ?: false)
-                                            Log.d(TAG, selectedContacts.toString())
+                                            selectedContacts[contact.id] =
+                                                !(selectedContacts[contact.id] ?: false)
                                             setRecyclerViewContent()
 
                                         }
@@ -370,6 +346,7 @@ class ChildOneFragment : Fragment() {
                                 )
                             }
                     )
+                    Divider(color = Color.LightGray, thickness = 1.dp)
                 }
             }
         }
