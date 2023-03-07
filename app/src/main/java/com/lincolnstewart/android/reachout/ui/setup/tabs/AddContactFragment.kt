@@ -23,27 +23,15 @@ class AddContactFragment : Fragment() {
     private var _binding: FragmentAddContactBinding? = null
     private val binding get() = _binding!!
 
-    companion object {
-        fun newInstance() = AddContactFragment()
-    }
-
     private lateinit var viewModel: ChildOneViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // For conventional xml
-//        return inflater.inflate(R.layout.fragment_add_contact, container, false)
+        viewModel = ViewModelProvider(this).get(ChildOneViewModel::class.java)
         _binding = FragmentAddContactBinding.inflate(inflater, container, false)
         return binding.root
-
-        // For composable
-//        return ComposeView(requireContext()).apply {
-//            setContent {
-//                CreateContactForm()
-//            }
-//        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -51,10 +39,9 @@ class AddContactFragment : Fragment() {
         binding.saveContactButton.setOnClickListener { saveContactOnClicked() }
     }
 
-    //TODO: Delete this method and assign viewModel variable elsewhere
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(ChildOneViewModel::class.java)
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     private fun saveContactOnClicked() {
@@ -79,7 +66,7 @@ class AddContactFragment : Fragment() {
             // Dismiss this fragment
             findNavController().popBackStack()
         } else {
-            Log.d(TAG, "Empty value received, prompt user to fill all fields")
+            Toast.makeText(binding.root.context, "All fields are required", Toast.LENGTH_SHORT).show()
         }
     }
 

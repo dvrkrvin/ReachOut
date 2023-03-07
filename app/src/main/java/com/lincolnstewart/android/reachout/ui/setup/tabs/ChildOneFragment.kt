@@ -139,7 +139,7 @@ class ChildOneFragment : Fragment() {
                 requireActivity(),
                 Manifest.permission.READ_CONTACTS
             ) -> {
-                // TODO: Explain why we need the permission
+                // TODO?: Explain why we need the permission
             }
             else -> {
                 // Permission not yet asked, request the permission
@@ -381,8 +381,3 @@ class ChildOneFragment : Fragment() {
 //            }
 //        }
 //    }
-
-// Holding onto for testing purposes
-//private fun showToast(text: String) {
-//    Toast.makeText(binding.root.context, text, Toast.LENGTH_SHORT).show()
-//}

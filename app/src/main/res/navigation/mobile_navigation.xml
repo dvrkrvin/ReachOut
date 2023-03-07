@@ -17,8 +17,6 @@
         android:label="@string/title_setup"
         tools:layout="@layout/fragment_setup"/>
 
-
-
     <fragment
         android:id="@+id/navigation_reach"
         android:name="com.lincolnstewart.android.reachout.ui.reach.ReachFragment"
