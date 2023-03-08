@@ -10,6 +10,7 @@ import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat.getSystemService
 import java.util.*
 
+// This class has been replaced with an Alarm class
 class ReachOutNotificationService(
     private val context: Context
 ) {
