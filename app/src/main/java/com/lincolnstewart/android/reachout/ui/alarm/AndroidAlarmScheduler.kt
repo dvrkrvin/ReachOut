@@ -7,7 +7,7 @@ import android.content.Intent
 import android.util.Log
 import java.text.ParseException
 import java.text.SimpleDateFormat
-import java.time.ZoneId
+import java.time.DayOfWeek
 import java.util.*
 
 private const val TAG = "AndroidAlarmScheduler"
@@ -46,6 +46,9 @@ class AndroidAlarmScheduler(
             Log.d(TAG, "Failed to parse selected_time")
         }
 
+        Log.d(TAG, "Selected Frequency: $selectedFrequency")
+        Log.d(TAG, "Selected Day: $selectedDay")
+
         // Calculate interval of notifications based on selected frequency
         var intervalMillis: Long = 0
         when (selectedFrequency) {
@@ -57,11 +60,32 @@ class AndroidAlarmScheduler(
         // Set the time at which we trigger the notification into a Calendar instance
         val calendar = Calendar.getInstance()
 
-        // This block of code sets repeating notifications at the time saved into the users
-        // ReminderPrefs shared preferences using the key "selected_time"
-        // NOTE: Currently able to schedule the time and frequency of the notifications,
-        // still haven't figured out how to set a specific day
-        calendar.timeInMillis = System.currentTimeMillis()
+        // This block should theoretically set the notification to go off on the next occurrence of
+        // the selected day if the day has already passed.
+        // It appears to be working, though testing hasn't been thorough.
+        val today = Calendar.getInstance().get(Calendar.DAY_OF_WEEK)
+        val dayOfWeekMap = mapOf(
+            "Monday" to Calendar.MONDAY,
+            "Tuesday" to Calendar.TUESDAY,
+            "Wednesday" to Calendar.WEDNESDAY,
+            "Thursday" to Calendar.THURSDAY,
+            "Friday" to Calendar.FRIDAY,
+            "Saturday" to Calendar.SATURDAY,
+            "Sunday" to Calendar.SUNDAY
+        )
+
+        val selectedDayOfWeek = dayOfWeekMap[selectedDay]
+
+        if (selectedDayOfWeek != null) {
+            if (today > selectedDayOfWeek) {
+                calendar.add(Calendar.WEEK_OF_YEAR, 1)
+            }
+            calendar.set(Calendar.DAY_OF_WEEK, selectedDayOfWeek)
+        }
+
+        // This block of code sets repeating notifications at the day, time, and frequency of
+        // coinsurance saved into the users ReminderPrefs shared preferences
+
         calendar.set(Calendar.HOUR_OF_DAY, selectedHour)
         calendar.set(Calendar.MINUTE, selectedMinute)
         calendar.set(Calendar.SECOND, 0)
