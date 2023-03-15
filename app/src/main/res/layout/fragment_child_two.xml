@@ -11,7 +11,7 @@
         android:id="@+id/selectedTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:hint="12:00 PM"
+        android:hint="Click to set a time"
         android:textSize="48sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -20,7 +20,7 @@
 
     <Spinner
         android:id="@+id/day_spinner"
-        android:layout_width="172dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="36dp"
         android:entries="@array/day_options"
@@ -80,14 +80,5 @@
         app:layout_constraintEnd_toStartOf="@+id/frequency_spinner"
         app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintStart_toStartOf="parent" />
-
-    <Button
-        android:id="@+id/testButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="64dp"
-        android:text="Test notifications"
-        app:layout_constraintBottom_toTopOf="@+id/repeatTextView"
-        tools:layout_editor_absoluteX="133dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

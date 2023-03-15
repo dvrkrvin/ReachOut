@@ -11,6 +11,6 @@ class AlarmReceiver: BroadcastReceiver() {
         println("Alarm triggered: $message")
 
         val service = ReachOutNotificationService(context)
-        service.showNotification("Test123")
+        service.showNotification(message)
     }
 }

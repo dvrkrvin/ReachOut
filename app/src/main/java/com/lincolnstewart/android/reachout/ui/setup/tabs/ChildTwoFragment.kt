@@ -1,7 +1,6 @@
 package com.lincolnstewart.android.reachout.ui.setup.tabs
 
 import android.app.TimePickerDialog
-import android.content.Context
 import android.content.Context.MODE_PRIVATE
 import android.icu.text.SimpleDateFormat
 import android.os.Bundle
@@ -10,8 +9,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import com.lincolnstewart.android.reachout.R
 import com.lincolnstewart.android.reachout.ReachOutNotificationService
 import com.lincolnstewart.android.reachout.databinding.FragmentChildTwoBinding
 import com.lincolnstewart.android.reachout.ui.alarm.AlarmItem
@@ -48,7 +49,6 @@ class ChildTwoFragment : Fragment() {
 
         // For notification testing
         val service = ReachOutNotificationService(requireContext())
-//        service.showNotification("Ree")
         service.scheduleNotifications(requireContext())
 
         initializeSpinners()
@@ -57,27 +57,31 @@ class ChildTwoFragment : Fragment() {
             initializeTimePicker()
         }
 
-        val shedular = AndroidAlarmScheduler(requireContext())
-        binding.testButton.setOnClickListener {
-            val alarmItem = AlarmItem(
-                time = LocalDateTime.now()
-                    .plusSeconds(5),
-                message = "test"
-            )
-            alarmItem.let(shedular::schedule)
-        }
+        setInitialValues()
+
     }
 
     // For testing purposes
     override fun onPause() {
         super.onPause()
 
+        scheduleAlarm()
+
         val sharedPreferences = context?.getSharedPreferences("ReminderPrefs", MODE_PRIVATE)
 
+        // Get whatever has been set in shared prefs and log it for testing purposes
         val freqString = sharedPreferences?.getString("selected_frequency", "")
         val timeString = sharedPreferences?.getString("selected_time", "")
         val dayString = sharedPreferences?.getString("selected_day", "")
         Log.d(TAG, "Currently set in ReminderPrefs, Frequency: $freqString, Time: $timeString, Day: $dayString")
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        setInitialValues()
+
+
     }
 
     override fun onDestroyView() {
@@ -90,6 +94,23 @@ class ChildTwoFragment : Fragment() {
         val frequencySpinner = binding.frequencySpinner
         val daySpinner = binding.daySpinner
 
+        // Set custom spinner styles
+        val frequencyAdapter = ArrayAdapter.createFromResource(
+            requireContext(),
+            R.array.frequency_options,
+            R.layout.custom_spinner_item
+        )
+        val dayAdapter = ArrayAdapter.createFromResource(
+            requireContext(),
+            R.array.day_options,
+            R.layout.custom_spinner_item
+        )
+        frequencySpinner.adapter = frequencyAdapter
+        daySpinner.adapter = dayAdapter
+
+
+
+        // Set listeners
         frequencySpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
                 val selectedFrequency = parent.getItemAtPosition(position).toString()
@@ -136,14 +157,6 @@ class ChildTwoFragment : Fragment() {
                 selectedCalendar.set(Calendar.HOUR_OF_DAY, hourOfDay)
                 selectedCalendar.set(Calendar.MINUTE, minuteOfHour)
 
-//                // Get the AM/PM indicator
-//                val amPm = if (selectedCalendar.get(Calendar.AM_PM) == Calendar.AM) "AM" else "PM"
-//
-//                // Update the selected time text view with the selected time and AM/PM indicator
-//                binding.selectedTime.text = "$hourOfDay:$minuteOfHour $amPm"
-//
-//                Log.d(TAG, "Selected Time: $hourOfDay:$minuteOfHour $amPm")
-
                 // Format time to a Simple Date Format
                 val sdf = SimpleDateFormat("hh:mm a", Locale.getDefault())
                 val formattedTime = sdf.format(selectedCalendar.time)
@@ -164,5 +177,66 @@ class ChildTwoFragment : Fragment() {
         )
         // Show the time picker dialog
         timePickerDialog.show()
+    }
+
+    private fun scheduleAlarm() {
+        val scheduler = AndroidAlarmScheduler(requireContext())
+        val alarmItem = AlarmItem(
+            time = LocalDateTime.now(),
+            message = "Let's Reach Out"
+        )
+        alarmItem.let(scheduler::schedule)
+
+        Log.d(TAG, "Alarm Scheduled")
+    }
+
+    private fun setInitialValues() {
+
+        val sharedPreferences = context?.getSharedPreferences("ReminderPrefs", MODE_PRIVATE)
+
+        // Set time hint and //TODO: initial value
+        val timeString = sharedPreferences?.getString("selected_time", "")
+        Log.d(TAG, "Time string: $timeString")
+        if (timeString != null) {
+            if (timeString.isNotEmpty()) {
+                binding.selectedTime.hint = timeString
+
+            }
+        }
+
+        // Set spinner values
+        val freqString = sharedPreferences?.getString("selected_frequency", "")
+        val dayString = sharedPreferences?.getString("selected_day", "")
+        if (freqString != null && dayString != null) {
+            if (freqString.isNotEmpty() && dayString.isNotEmpty()) {
+                val freqInt = freqStringToSpinnerInt(freqString)
+                val dayInt = dayStringToSpinnerInt(dayString)
+
+                binding.frequencySpinner.setSelection(freqInt)
+                binding.daySpinner.setSelection(dayInt)
+            }
+        }
+
+    }
+
+    private fun freqStringToSpinnerInt (frequencyString: String) : Int{
+        when (frequencyString) {
+            "Weekly" -> return 0
+            "Bi-Weekly" -> return 1
+        }
+        return -1
+    }
+
+    private fun dayStringToSpinnerInt (dayString: String) : Int{
+        when (dayString) {
+            "Monday" -> return 0
+            "Tuesday" -> return 1
+            "Wednesday" -> return 2
+            "Thursday" -> return 3
+            "Friday" -> return 4
+            "Saturday" -> return 5
+            "Sunday" -> return 6
+        }
+        return -1
     }
 }
