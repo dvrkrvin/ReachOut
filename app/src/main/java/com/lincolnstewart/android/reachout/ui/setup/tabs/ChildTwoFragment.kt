@@ -22,6 +22,7 @@ import java.util.*
 
 private const val TAG = "ChildTwoFragment"
 
+// Notification Scheduling tab
 class ChildTwoFragment : Fragment() {
 
     //region Data members
@@ -80,8 +81,6 @@ class ChildTwoFragment : Fragment() {
         super.onResume()
 
         setInitialValues()
-
-
     }
 
     override fun onDestroyView() {
@@ -107,8 +106,6 @@ class ChildTwoFragment : Fragment() {
         )
         frequencySpinner.adapter = frequencyAdapter
         daySpinner.adapter = dayAdapter
-
-
 
         // Set listeners
         frequencySpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
@@ -179,19 +176,20 @@ class ChildTwoFragment : Fragment() {
         timePickerDialog.show()
     }
 
+    // TODO: Move this to the view-model
     private fun scheduleAlarm() {
         val scheduler = AndroidAlarmScheduler(requireContext())
         val alarmItem = AlarmItem(
             time = LocalDateTime.now(),
-            message = "Let's Reach Out"
+            message = "a friend"
         )
         alarmItem.let(scheduler::schedule)
 
         Log.d(TAG, "Alarm Scheduled")
     }
 
+    // Set users preferred or default schedule in the fragment
     private fun setInitialValues() {
-
         val sharedPreferences = context?.getSharedPreferences("ReminderPrefs", MODE_PRIVATE)
 
         // Set time hint and //TODO: initial value
@@ -200,7 +198,6 @@ class ChildTwoFragment : Fragment() {
         if (timeString != null) {
             if (timeString.isNotEmpty()) {
                 binding.selectedTime.hint = timeString
-
             }
         }
 
@@ -216,7 +213,6 @@ class ChildTwoFragment : Fragment() {
                 binding.daySpinner.setSelection(dayInt)
             }
         }
-
     }
 
     private fun freqStringToSpinnerInt (frequencyString: String) : Int{

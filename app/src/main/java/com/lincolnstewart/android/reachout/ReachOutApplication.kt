@@ -5,12 +5,21 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
 import android.os.Build
+import android.util.Log
+import com.lincolnstewart.android.reachout.ui.alarm.AlarmItem
+import com.lincolnstewart.android.reachout.ui.alarm.AlarmScheduler
+import com.lincolnstewart.android.reachout.ui.alarm.AndroidAlarmScheduler
+import java.time.LocalDateTime
+
+private const val TAG = "ReachOutApplication"
 
 class ReachOutApplication : Application() {
     override fun onCreate() {
         super.onCreate()
         ContactRepository.initialize(this)
         createNotificationChannel()
+
+        scheduleNotifications()
     }
 
     private fun createNotificationChannel() {
@@ -26,4 +35,16 @@ class ReachOutApplication : Application() {
             notificationManager.createNotificationChannel(channel)
         }
     }
+
+    private fun scheduleNotifications() {
+        val scheduler = AndroidAlarmScheduler(this)
+        val alarmItem = AlarmItem(
+            time = LocalDateTime.now(),
+            message = "a Friend"
+        )
+        alarmItem.let(scheduler::schedule)
+
+        Log.d(TAG, "Alarm Scheduled")
+    }
+
 }

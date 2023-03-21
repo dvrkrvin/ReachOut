@@ -27,7 +27,7 @@ class ReachOutNotificationService(
         val notification = NotificationCompat.Builder(context, REACHOUT_CHANNEL_ID)
             .setSmallIcon(R.drawable.ic_people)
             .setContentTitle("Reach Out")
-            .setContentText("Reach out to $name")
+            .setContentText("Let's reach out to $name")
             .setContentIntent(activityPendingIntent)
             .build()
 

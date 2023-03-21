@@ -17,19 +17,48 @@ class AndroidAlarmScheduler(
 ): AlarmScheduler {
     private val alarmManager = context.getSystemService(AlarmManager::class.java)
 
+    // Get users preferred time from shared preferences and schedule a repeating alarm
     override fun schedule(item: AlarmItem) {
         val intent = Intent(context, AlarmReceiver::class.java).apply {
             putExtra("EXTRA_MESSAGE", item.message)
         }
+        intent.action = Intent.ACTION_VIEW
         val pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
 
         val sharedPreferences = context.getSharedPreferences("ReminderPrefs", Context.MODE_PRIVATE)
         val selectedFrequency = sharedPreferences?.getString("selected_frequency", "")
         val selectedDay = sharedPreferences?.getString("selected_day", "")
-
-        // Attempt to parse selected time
         val selectedTime = sharedPreferences.getString("selected_time", "")
 
+        // If we don't have a preferred time, set default time
+        if (selectedFrequency != null && selectedDay != null && selectedTime != null) {
+            if (selectedFrequency.isEmpty() || selectedDay.isEmpty() || selectedTime.isEmpty()) {
+
+                Log.d(TAG, "Preferred notification schedule does not exist, setting default alarm schedule")
+
+                val defaultHour = 19
+                val defaultMinute = 0
+                val defaultFrequency = AlarmManager.INTERVAL_DAY * 7
+                val defaultDay = Calendar.MONDAY
+
+                val calendar = Calendar.getInstance()
+                calendar.set(Calendar.DAY_OF_WEEK, defaultDay)
+                calendar.set(Calendar.HOUR_OF_DAY, defaultHour)
+                calendar.set(Calendar.MINUTE, defaultMinute)
+                calendar.set(Calendar.SECOND, 0)
+                alarmManager.setRepeating(
+                    AlarmManager.RTC_WAKEUP,
+                    calendar.timeInMillis, // Time at which the we trigger the notification
+                    defaultFrequency, // Interval between notifications
+                    pendingIntent
+                )
+                return
+            }
+        }
+
+        Log.d(TAG, "Preferred notification schedule exists, parsing and setting to alarm")
+
+        // Attempt to parse selected time
         val sdf = SimpleDateFormat("hh:mm aa", Locale.getDefault())
         var selectedHour = 12
         var selectedMinute = 0
@@ -95,40 +124,6 @@ class AndroidAlarmScheduler(
             intervalMillis, // Interval between notifications
             pendingIntent
         )
-
-        // This block of code will set a repeating notification at the set time,
-        // it currently does not use either of the data members received with the item: AlarmItem
-//        val calendar = Calendar.getInstance()
-//        calendar.timeInMillis = System.currentTimeMillis()
-//        calendar.set(Calendar.HOUR_OF_DAY, 0)
-//        calendar.set(Calendar.MINUTE, 55)
-//        calendar.set(Calendar.SECOND, 0)
-//        alarmManager.setRepeating(
-//            AlarmManager.RTC_WAKEUP,
-//            calendar.timeInMillis,
-//            AlarmManager.INTERVAL_DAY,
-//            pendingIntent
-//        )
-
-            // This block will send the notification every 15 minutes for testing
-//        alarmManager.setRepeating(
-//            AlarmManager.RTC_WAKEUP,
-//            calendar.timeInMillis,
-//            AlarmManager.INTERVAL_FIFTEEN_MINUTES,
-//            pendingIntent
-//        )
-
-        // This will send it at the time specified in the call which is in C2Fragment
-//        alarmManager.setExactAndAllowWhileIdle(
-//            AlarmManager.RTC_WAKEUP,
-//            item.time.atZone(ZoneId.systemDefault()).toEpochSecond() * 1000,
-//            PendingIntent.getBroadcast(
-//                context,
-//                item.hashCode(),
-//                intent,
-//                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-//            )
-//        )
     }
 
     override fun cancel(item: AlarmItem) {
