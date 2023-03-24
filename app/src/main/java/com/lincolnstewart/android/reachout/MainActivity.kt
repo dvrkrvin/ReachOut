@@ -1,9 +1,8 @@
 package com.lincolnstewart.android.reachout
 
-import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -35,22 +34,22 @@ class MainActivity : AppCompatActivity() {
         val bottomNavigationView: BottomNavigationView = findViewById(R.id.bottomNavigationView)
         bottomNavigationView.setOnItemSelectedListener { menuItem ->
             when (menuItem.itemId) {
-                R.id.miHome -> {
+                R.id.navigation_home -> {
                     navController.navigate(R.id.navigation_home)
                     Log.d(TAG, "HOME SELECTED")
                     true
                 }
-                R.id.miSetup -> {
+                R.id.navigation_setup -> {
                     navController.navigate(R.id.navigation_setup)
                     Log.d(TAG, "SETUP SELECTED")
                     true
                 }
-                R.id.miResources -> {
+                R.id.navigation_resources -> {
                     navController.navigate(R.id.navigation_resources)
                     Log.d(TAG, "RESOURCES SELECTED")
                     true
                 }
-                R.id.miHelp -> {
+                R.id.navigation_help -> {
                     navController.navigate(R.id.navigation_help)
                     Log.d(TAG, "HELP SELECTED")
                     true
@@ -59,6 +58,8 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+        // Listen to navigation changes to check correct bottom nav item when navigating indirectly
+        // (e.g. user pressing pressing the back button)
         val navListener = NavController.OnDestinationChangedListener { _, destination, _ ->
             bottomNavigationView.menu.findItem(destination.id)?.isChecked = true
         }
@@ -68,7 +69,16 @@ class MainActivity : AppCompatActivity() {
     private fun reachOut() {
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottomNavigationView)
 //        bottomNavigationView.clearCheck()
-        bottomNavigationView.menu.findItem(R.id.placeholder)?.isChecked = true
+        bottomNavigationView.menu.findItem(R.id.navigation_reach)?.isChecked = true
+
+        val menuItem = bottomNavigationView.menu.findItem(R.id.navigation_reach)
+        Log.d(TAG, "Reach Out MenuItem: $menuItem")
+        // For slide up animation
+//        val options = NavOptions.Builder()
+//            .setEnterAnim(R.anim.slide_up)
+//            .build()
+//        navController.navigate(R.id.navigation_reach, null, options)
+
         navController.navigate(R.id.navigation_reach)
     }
 }

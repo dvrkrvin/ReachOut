@@ -3,9 +3,7 @@ package com.lincolnstewart.android.reachout.ui.setup
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
@@ -43,7 +41,7 @@ class SetupFragment : Fragment(R.layout.fragment_setup) {
                 }
             }
             // show the TabLayout if the current destination is a child fragment
-            if (destination.parent?.id == R.id.miSetup) {
+            if (destination.parent?.id == R.id.navigation_setup) {
                 tabLayout.visibility = View.VISIBLE
             }
         }

@@ -3,9 +3,7 @@ package com.lincolnstewart.android.reachout.ui.resources
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.adapter.FragmentStateAdapter
@@ -13,7 +11,6 @@ import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.lincolnstewart.android.reachout.R
-import com.lincolnstewart.android.reachout.databinding.FragmentResourcesBinding
 import com.lincolnstewart.android.reachout.ui.resources.tabs.ResourceChildOneFragment
 import com.lincolnstewart.android.reachout.ui.resources.tabs.ResourceChildThreeFragment
 import com.lincolnstewart.android.reachout.ui.resources.tabs.ResourceChildTwoFragment
@@ -52,7 +49,7 @@ class ResourcesFragment : Fragment(R.layout.fragment_resources) {
                 }
             }
             // show the TabLayout if the current destination is a child fragment
-            if (destination.parent?.id == R.id.miResources) {
+            if (destination.parent?.id == R.id.navigation_resources) {
                 tabLayout.visibility = View.VISIBLE
             }
         }

@@ -2,9 +2,14 @@ package com.lincolnstewart.android.reachout.ui.alarm
 
 import android.app.AlarmManager
 import android.app.PendingIntent
+import android.app.TaskStackBuilder
 import android.content.Context
 import android.content.Intent
 import android.util.Log
+import androidx.navigation.NavDeepLinkBuilder
+import com.lincolnstewart.android.reachout.MainActivity
+import com.lincolnstewart.android.reachout.R
+import com.lincolnstewart.android.reachout.ui.reach.ReachFragment
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.time.DayOfWeek
@@ -23,7 +28,11 @@ class AndroidAlarmScheduler(
             putExtra("EXTRA_MESSAGE", item.message)
         }
         intent.action = Intent.ACTION_VIEW
-        val pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
+        val pendingIntent = PendingIntent.getBroadcast(
+            context,
+            0,
+            intent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
 
         val sharedPreferences = context.getSharedPreferences("ReminderPrefs", Context.MODE_PRIVATE)
         val selectedFrequency = sharedPreferences?.getString("selected_frequency", "")

@@ -21,4 +21,6 @@
         <item>Saturday</item>
         <item>Sunday</item>
     </string-array>
+    <string name="my_fragment_deep_link">com.lincolnstewart.android.reachout.ui.reach</string>
+
 </resources>

@@ -2,6 +2,7 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:nav="http://schemas.android.com/apk/res-auto"
     android:id="@+id/mobile_navigation"
     app:startDestination="@+id/navigation_home">
 
@@ -21,7 +22,12 @@
         android:id="@+id/navigation_reach"
         android:name="com.lincolnstewart.android.reachout.ui.reach.ReachFragment"
         android:label="@string/title_reach"
-        tools:layout="@layout/fragment_reach" />
+        tools:layout="@layout/fragment_reach">
+        <nav:deepLink
+            android:id="@+id/myFragmentDeepLink"
+            app:uri="@string/my_fragment_deep_link" />
+    </fragment>
+
 
     <fragment
         android:id="@+id/navigation_resources"
