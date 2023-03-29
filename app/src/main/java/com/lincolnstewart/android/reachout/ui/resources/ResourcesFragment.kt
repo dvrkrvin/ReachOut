@@ -2,8 +2,10 @@ package com.lincolnstewart.android.reachout.ui.resources
 
 import android.os.Bundle
 import android.util.Log
+import android.view.LayoutInflater
 import androidx.fragment.app.Fragment
 import android.view.View
+import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.adapter.FragmentStateAdapter
@@ -11,6 +13,7 @@ import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.lincolnstewart.android.reachout.R
+import com.lincolnstewart.android.reachout.databinding.FragmentResourcesBinding
 import com.lincolnstewart.android.reachout.ui.resources.tabs.ResourceChildOneFragment
 import com.lincolnstewart.android.reachout.ui.resources.tabs.ResourceChildThreeFragment
 import com.lincolnstewart.android.reachout.ui.resources.tabs.ResourceChildTwoFragment
@@ -19,16 +22,22 @@ const val TAG = "ResourcesFragment"
 
 class ResourcesFragment : Fragment(R.layout.fragment_resources) {
 
-
-    companion object {
-        fun newInstance() = ResourcesFragment()
-    }
+    private var _binding: FragmentResourcesBinding? = null
+    private val binding get() = _binding!!
 
     private lateinit var viewModel: ResourcesViewModel
 
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        viewModel = ViewModelProvider(this).get(ResourcesViewModel::class.java)
+        _binding = FragmentResourcesBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         Log.d(TAG, "Resources fragment onViewCreated called")
 
         // Initialize the TabLayout and ViewPager2 views

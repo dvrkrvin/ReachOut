@@ -8,15 +8,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.lincolnstewart.android.reachout.R
+import com.lincolnstewart.android.reachout.ui.resources.ResourcesViewModel
 
 const val TAG = "ResourceChildOneFragment"
 
+// Helpful articles tab
 class ResourceChildOneFragment : Fragment() {
 
     companion object {
         fun newInstance() = ResourceChildOneFragment()
     }
 
+    private lateinit var sharedResourcesViewModel: ResourcesViewModel
     private lateinit var viewModel: ResourceChildOneViewModel
 
     override fun onCreateView(
@@ -24,13 +27,15 @@ class ResourceChildOneFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         Log.d(TAG, "RCOF onCreateView called")
+        viewModel = ViewModelProvider(this).get(ResourceChildOneViewModel::class.java)
+        sharedResourcesViewModel = ViewModelProvider(this).get(ResourcesViewModel::class.java)
         return inflater.inflate(R.layout.fragment_resource_child_one, container, false)
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(ResourceChildOneViewModel::class.java)
-        // TODO: Use the ViewModel
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        viewModel.retrieveArticleLinks()
     }
+
 
 }
