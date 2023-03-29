@@ -109,7 +109,7 @@ class ReachFragment : Fragment() {
 
                 var selectedContact: Contact? = null
                 val random = Random()
-                for (i in 0 until 30) { // browse over 10 contacts before stopping
+                for (i in 0 until 25) { // browse over 25 contacts before stopping
                     selectedContact = it[random.nextInt(it.size)]
                     nameText.text = selectedContact.displayName
                     delay(75) // delay of 75 milliseconds for visibility

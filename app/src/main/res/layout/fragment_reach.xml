@@ -11,11 +11,11 @@
         android:id="@+id/callToActionText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="76dp"
         android:layout_marginTop="136dp"
         android:text="Let's Reach Out to"
         android:textSize="32sp"
         android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -23,35 +23,41 @@
         android:id="@+id/nameText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="216dp"
-        android:visibility="invisible"
+        android:layout_marginTop="37dp"
         android:text="{Name}"
         android:textSize="48sp"
+        android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
-        android:id="@+id/callButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:visibility="invisible"
-        android:layout_marginBottom="23dp"
-        android:text="Call"
-        android:textSize="18sp"
-        app:layout_constraintBottom_toTopOf="@+id/textButton"
-        app:layout_constraintStart_toStartOf="@+id/textButton" />
+        app:layout_constraintTop_toBottomOf="@+id/callToActionText" />
 
     <Button
         android:id="@+id/textButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:visibility="invisible"
-        android:layout_marginBottom="136dp"
+        android:layout_marginBottom="173dp"
+        android:paddingHorizontal="72dp"
+        android:paddingVertical="16dp"
         android:text="Text"
         android:textSize="18sp"
+        android:visibility="invisible"
+        app:cornerRadius="12dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/callButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="13dp"
+        android:paddingHorizontal="72dp"
+        android:paddingVertical="16dp"
+        android:text="Call"
+        android:textSize="18sp"
+        android:visibility="invisible"
+        app:cornerRadius="12dp"
+        app:layout_constraintBottom_toTopOf="@+id/textButton"
+        app:layout_constraintEnd_toEndOf="@+id/textButton" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
