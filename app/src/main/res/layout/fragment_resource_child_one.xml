@@ -5,11 +5,16 @@
     android:layout_height="match_parent"
     tools:context=".ui.resources.tabs.ResourceChildOneFragment">
 
+    <androidx.compose.ui.platform.ComposeView
+        android:id="@+id/video_compose_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
     <TextView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:text="TAB 1"
         android:gravity="center"
-        android:textSize="70dp"/>
+        android:textSize="70sp"/>
 
 </FrameLayout>

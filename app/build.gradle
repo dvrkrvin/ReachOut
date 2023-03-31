@@ -84,6 +84,10 @@ dependencies {
     implementation 'androidx.room:room-ktx:2.5.0'
     kapt 'androidx.room:room-compiler:2.5.0'
 
+    // For getting Titles from URLs
+    implementation 'org.jsoup:jsoup:1.14.3'
+
+
     // For passing Contact objects
 //    implementation 'androidx.core:core-ktx:1.9.0'
 
