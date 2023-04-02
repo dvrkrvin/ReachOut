@@ -66,9 +66,9 @@ class ResourcesFragment : Fragment(R.layout.fragment_resources) {
         // Connect the ViewPager2 to the NavController using a TabLayoutMediator
         val tabLayoutMediator = TabLayoutMediator(tabLayout, viewPager) { tab, position ->
             tab.text = when (position) {
-                0 -> "First Fragment"
-                1 -> "Second Fragment"
-                2 -> "Third Fragment"
+                0 -> "Read"
+                1 -> "Watch"
+                2 -> "Connect"
                 else -> ""
             }
         }

@@ -23,6 +23,11 @@ class ResourceChildThreeFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_resource_child_three, container, false)
     }
 
+//    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+//        super.onViewCreated(view, savedInstanceState)
+//
+//    }
+
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this).get(ResourceChildThreeViewModel::class.java)

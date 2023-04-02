@@ -177,7 +177,7 @@ class ResourceChildOneFragment : Fragment() {
 
     private fun setRecyclerViewContent() {
         val composeView = requireView().findViewById<ComposeView>(R.id.video_compose_view)
-        composeView.setContent { RecyclerView(viewModel.articles) }
+        composeView?.setContent { RecyclerView(viewModel.articles) }
     }
 
     @Composable

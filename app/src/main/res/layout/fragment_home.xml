@@ -1,15 +1,128 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/constraintLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.home.HomeFragment">
 
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:textSize="30dp"
-        android:text="Home fragment" />
+        android:id="@+id/quotesTextView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:visibility="invisible"
+        android:layout_marginStart="55dp"
+        android:layout_marginTop="84dp"
+        android:layout_marginEnd="55dp"
+        android:text="{Cycling mental health quotes}"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-</FrameLayout>
+    <TextView
+        android:id="@+id/quoteAuthorView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="invisible"
+        android:layout_marginStart="88dp"
+        android:layout_marginTop="5dp"
+        android:text="TextView"
+        app:layout_constraintStart_toStartOf="@+id/quotesTextView"
+        app:layout_constraintTop_toBottomOf="@+id/quotesTextView" />
+
+    <TextView
+        android:id="@+id/levelLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="28dp"
+        android:text="Lv."
+        android:textSize="64sp"
+        app:layout_constraintBaseline_toBaselineOf="@+id/levelTextView"
+        app:layout_constraintEnd_toEndOf="@+id/quoteAuthorView" />
+
+    <TextView
+        android:id="@+id/levelTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="55dp"
+        android:text="0"
+        android:textSize="64sp"
+        app:layout_constraintStart_toEndOf="@+id/levelLabel"
+        app:layout_constraintTop_toBottomOf="@+id/quoteAuthorView" />
+
+    <TextView
+        android:id="@+id/xpTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="43dp"
+        android:layout_marginEnd="43dp"
+        android:layout_marginBottom="335dp"
+        android:text="0/1000"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/sinceLastTextView" />
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="0dp"
+        android:layout_height="27dp"
+        android:layout_marginStart="44dp"
+        android:layout_marginTop="1dp"
+        android:layout_marginEnd="44dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/xpTextView" />
+
+    <TextView
+        android:id="@+id/thisWeekLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="45dp"
+        android:layout_marginEnd="68dp"
+        android:layout_marginBottom="106dp"
+        android:text="reachouts this month"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/sinceLastLabel"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/thisWeekTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="41dp"
+        android:layout_marginBottom="11dp"
+        android:text="0"
+        android:textSize="56sp"
+        app:layout_constraintBottom_toTopOf="@+id/thisWeekLabel"
+        app:layout_constraintEnd_toEndOf="@+id/thisWeekLabel" />
+
+    <TextView
+        android:id="@+id/sinceLastLabel"
+        android:layout_width="0dp"
+        android:layout_height="38dp"
+        android:layout_marginTop="86dp"
+        android:layout_marginEnd="58dp"
+        android:layout_marginBottom="87dp"
+        android:text="days since last reach out"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/thisWeekLabel"
+        app:layout_constraintTop_toTopOf="@+id/sinceLastTextView" />
+
+    <TextView
+        android:id="@+id/sinceLastTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="34dp"
+        android:text="0"
+        android:textSize="56sp"
+        app:layout_constraintBottom_toBottomOf="@+id/thisWeekTextView"
+        app:layout_constraintStart_toStartOf="@+id/sinceLastLabel"
+        app:layout_constraintTop_toTopOf="@+id/thisWeekTextView" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
