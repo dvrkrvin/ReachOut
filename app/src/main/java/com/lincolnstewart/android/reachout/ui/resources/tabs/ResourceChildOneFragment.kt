@@ -27,22 +27,11 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.lifecycleScope
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
 import com.lincolnstewart.android.reachout.R
+import com.lincolnstewart.android.reachout.ReachOutApplication
 import com.lincolnstewart.android.reachout.databinding.FragmentResourceChildOneBinding
-import com.lincolnstewart.android.reachout.databinding.FragmentResourceChildTwoBinding
 import com.lincolnstewart.android.reachout.model.Article
 import com.lincolnstewart.android.reachout.ui.resources.ResourcesViewModel
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import org.jsoup.Jsoup
-import org.jsoup.nodes.Document
 import java.util.*
 
 const val TAG = "ResourceChildOneFragment"
@@ -57,10 +46,12 @@ class ResourceChildOneFragment : Fragment() {
     private var _binding: FragmentResourceChildOneBinding? = null
     private val binding get() = _binding!!
 
-    private lateinit var sharedResourcesViewModel: ResourcesViewModel
     private lateinit var viewModel: ResourceChildOneViewModel
 
-    private var articleJob: Job? = null
+    // Get application class instance
+    private val appContext: ReachOutApplication by lazy {
+        requireActivity().applicationContext as ReachOutApplication
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -73,102 +64,13 @@ class ResourceChildOneFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        // Retrieve article links from Firebase and store them in the view model
-        retrieveArticleLinks()
+        setRecyclerViewContent()
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
-
-        // Cancel chooseRandomContact if user leaves fragment before the job is complete
-        articleJob?.cancel()
         _binding = null
     }
-
-    private fun retrieveArticleLinks() {
-        // This block of code is for retrieving data from Firebase
-        val database = FirebaseDatabase.getInstance()
-        val articleLinksRef = database.getReference("resources/articleLinks")
-
-        val articleLinksListener = object : ValueEventListener {
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                for (childSnapshot in dataSnapshot.children) {
-                    val link = childSnapshot.getValue(String::class.java)
-                    if (link != null) {
-
-                        // Create Article object and add it to the list
-                        articleJob = lifecycleScope.launch {
-                            val title = getWebPageTitle(link)
-
-                            val article = Article(UUID.randomUUID(), title, link)
-
-                            viewModel.articles.add(article)
-                            setRecyclerViewContent()
-                        }
-
-                    }
-                }
-                Log.d(com.lincolnstewart.android.reachout.ui.resources.TAG, "Article links received: ${viewModel.articles.count()}")
-            }
-
-            override fun onCancelled(databaseError: DatabaseError) {
-                Log.e(TAG, "Error retrieving article links: $databaseError")
-            }
-        }
-
-        articleLinksRef.addValueEventListener(articleLinksListener)
-        // End of Firebase data retrieval block
-    }
-
-    suspend fun getWebPageTitle(url: String): String = withContext(Dispatchers.IO) {
-        val document = Jsoup.connect(url).get()
-        return@withContext document.title()
-    }
-
-    // This function is not in use
-    suspend fun getWebPageMainImage(url: String): String? {
-        return withContext(Dispatchers.IO) {
-            val document: Document = Jsoup.connect(url).get()
-
-            val metaImage = document.select("meta[property=og:image]").attr("content")
-
-            if (metaImage.isNotEmpty()) {
-                metaImage
-            } else {
-                val images = document.select("img[src~=(?i)\\.(png|jpe?g|gif)]")
-                if (images.size > 0) {
-                    images[0].absUrl("src")
-                } else {
-                    null
-                }
-            }
-        }
-    }
-
-    // This kind of works but I want to write my own descriptions
-//    suspend fun getWebPageDescription(url: String): String? {
-//        val document: Document = withContext(Dispatchers.IO) {
-//            Jsoup.connect(url).get()
-//        }
-//
-//        val metaDescription = document.select("meta[name=description]").attr("content")
-//        if (metaDescription.isNotEmpty()) {
-//            return metaDescription
-//        }
-//
-//        val ogDescription = document.select("meta[property=og:description]").attr("content")
-//        if (ogDescription.isNotEmpty()) {
-//            return ogDescription
-//        }
-//
-//        val firstParagraph = document.select("p").first()
-//        if (firstParagraph != null) {
-//            return firstParagraph.text()
-//        }
-//
-//        return null
-//    }
 
     private fun followLink(link: String, context: Context) {
         val intent = Intent(Intent.ACTION_VIEW, Uri.parse(link))
@@ -176,10 +78,32 @@ class ResourceChildOneFragment : Fragment() {
     }
 
     private fun setRecyclerViewContent() {
+        Log.d(TAG, appContext.cachedArticles.toString())
         val composeView = requireView().findViewById<ComposeView>(R.id.video_compose_view)
-        composeView?.setContent { RecyclerView(viewModel.articles) }
+        composeView?.setContent { RecyclerView(appContext.cachedArticles) }
     }
 
+    // This function is not in use
+//    suspend fun getWebPageMainImage(url: String): String? {
+//        return withContext(Dispatchers.IO) {
+//            val document: Document = Jsoup.connect(url).get()
+//
+//            val metaImage = document.select("meta[property=og:image]").attr("content")
+//
+//            if (metaImage.isNotEmpty()) {
+//                metaImage
+//            } else {
+//                val images = document.select("img[src~=(?i)\\.(png|jpe?g|gif)]")
+//                if (images.size > 0) {
+//                    images[0].absUrl("src")
+//                } else {
+//                    null
+//                }
+//            }
+//        }
+//    }
+
+    //region Composable functions
     @Composable
     fun ArticleListItem(article: Article) {
         Row(
@@ -240,4 +164,5 @@ class ResourceChildOneFragment : Fragment() {
             )
         )
     }
+    //endregion
 }

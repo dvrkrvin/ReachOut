@@ -33,6 +33,7 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.lincolnstewart.android.reachout.R
+import com.lincolnstewart.android.reachout.ReachOutApplication
 import com.lincolnstewart.android.reachout.databinding.FragmentReachBinding
 import com.lincolnstewart.android.reachout.databinding.FragmentResourceChildTwoBinding
 import com.lincolnstewart.android.reachout.model.Video
@@ -56,6 +57,11 @@ class ResourceChildTwoFragment : Fragment() {
     private lateinit var viewModel: ResourceChildTwoViewModel
     private var videoJob: Job? = null
 
+    // Get application class instance
+    private val appContext: ReachOutApplication by lazy {
+        requireActivity().applicationContext as ReachOutApplication
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -69,7 +75,8 @@ class ResourceChildTwoFragment : Fragment() {
 
         super.onViewCreated(view, savedInstanceState)
 
-        retrieveVideoLinks()
+//        retrieveVideoLinks()
+        setRecyclerViewContent()
     }
 
     override fun onDestroyView() {
@@ -80,46 +87,7 @@ class ResourceChildTwoFragment : Fragment() {
         _binding = null
     }
 
-    private fun retrieveVideoLinks() {
-        // This block of code is for retrieving data from Firebase
-        val database = FirebaseDatabase.getInstance()
-        val videoLinksRef = database.getReference("resources/videoLinks")
 
-        val videoLinksListener = object : ValueEventListener {
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                for (childSnapshot in dataSnapshot.children) {
-                    val link = childSnapshot.getValue(String::class.java)
-                    if (link != null) {
-
-                        // Create Video object and add it to the list
-                        videoJob = lifecycleScope.launch {
-                            val title = getWebPageTitle(link)
-//                            val image = getWebPageMainImage(link)
-
-                            val video = Video(UUID.randomUUID(), title, link)
-
-                            viewModel.videos.add(video)
-                            setRecyclerViewContent()
-                        }
-
-                    }
-                }
-                Log.d(com.lincolnstewart.android.reachout.ui.resources.TAG, "Video links received: ${viewModel.videos.count()}")
-            }
-
-            override fun onCancelled(databaseError: DatabaseError) {
-                Log.e(TAG, "Error retrieving video links: $databaseError")
-            }
-        }
-
-        videoLinksRef.addValueEventListener(videoLinksListener)
-        // End of Firebase data retrieval block
-    }
-
-    suspend fun getWebPageTitle(url: String): String = withContext(Dispatchers.IO) {
-        val document = Jsoup.connect(url).get()
-        return@withContext document.title()
-    }
 
     // This function is not in use
     suspend fun getWebPageMainImage(url: String): String? {
@@ -148,7 +116,7 @@ class ResourceChildTwoFragment : Fragment() {
 
     private fun setRecyclerViewContent() {
         val composeView = requireView().findViewById<ComposeView>(R.id.video_compose_view)
-        composeView.setContent { RecyclerView(viewModel.videos) }
+        composeView.setContent { RecyclerView(appContext.cachedVideos) }
     }
 
     @Composable
