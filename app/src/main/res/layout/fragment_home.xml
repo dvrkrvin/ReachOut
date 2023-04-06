@@ -11,7 +11,7 @@
         android:id="@+id/quotesTextView"
         android:layout_width="wrap_content"
         android:layout_height="34dp"
-        android:layout_marginTop="80dp"
+        android:layout_marginTop="112dp"
         android:paddingHorizontal="40dp"
         android:text="{Cycling mental health quotes}"
         android:textAlignment="center"
@@ -73,15 +73,15 @@
         style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="323dp"
         android:layout_height="12dp"
-        android:layout_marginTop="96dp"
+        android:layout_marginTop="72dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/levelLabel" />
 
     <TextView
         android:id="@+id/thisWeekLabel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="137dp"
+        android:layout_height="18dp"
         android:text="reachouts this month"
         android:textSize="14sp"
         app:layout_constraintEnd_toStartOf="@+id/sinceLastLabel"
@@ -115,12 +115,23 @@
         android:id="@+id/sinceLastTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="72dp"
+        android:layout_marginTop="80dp"
         android:text="0"
         android:textSize="56sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/thisWeekTextView"
         app:layout_constraintTop_toBottomOf="@+id/progressBar" />
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="283dp"
+        android:layout_height="161dp"
+        android:layout_marginTop="64dp"
+        android:alpha=".05"
+        android:src="@drawable/ic_people"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

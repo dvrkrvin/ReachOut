@@ -88,7 +88,7 @@ class HomeFragment : Fragment() {
         var index = 0
 
         quoteCycleJob = lifecycleScope.launch {
-            delay(1500)
+            delay(1250)
             while (true) {
                 val quote = quotes[index % quotes.size]
                 binding.quotesTextView.text = """"${quote.quoteText}""""
@@ -102,7 +102,7 @@ class HomeFragment : Fragment() {
                 binding.quoteAuthorView.startAnimation(fadeOutAnim)
                 binding.quotesTextView.visibility = View.INVISIBLE
                 binding.quoteAuthorView.visibility = View.INVISIBLE
-                delay(2000)
+                delay(1250)
                 index++
             }
         }

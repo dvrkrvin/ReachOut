@@ -11,6 +11,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -18,10 +19,11 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Divider
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.res.painterResource
@@ -32,6 +34,7 @@ import com.lincolnstewart.android.reachout.ReachOutApplication
 import com.lincolnstewart.android.reachout.databinding.FragmentResourceChildOneBinding
 import com.lincolnstewart.android.reachout.model.Article
 import com.lincolnstewart.android.reachout.ui.resources.ResourcesViewModel
+import kotlinx.coroutines.delay
 import java.util.*
 
 const val TAG = "ResourceChildOneFragment"
@@ -106,18 +109,21 @@ class ResourceChildOneFragment : Fragment() {
     //region Composable functions
     @Composable
     fun ArticleListItem(article: Article) {
+        var isTapped by remember { mutableStateOf(false) }
         Row(
             horizontalArrangement = Arrangement.spacedBy(16.dp),
             verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.height(64.dp)
+            modifier = Modifier.height(62.dp)
                 .fillMaxWidth()
                 .pointerInput(Unit) {
                     detectTapGestures(
                         onTap = {
                             followLink(article.link, requireContext())
+                            isTapped = true
                         }
                     )
                 }
+                .background(color = if (isTapped) Color.LightGray else Color.White )
                 .padding(vertical = 8.dp, horizontal = 16.dp)
         ) {
             Image(
@@ -136,6 +142,10 @@ class ResourceChildOneFragment : Fragment() {
 //                    textAlign = TextAlign.Start
 //                )
             }
+        }
+        LaunchedEffect(isTapped) {
+            delay(100) // set the duration of the animation here
+            isTapped = false
         }
     }
 
