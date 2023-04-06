@@ -1,6 +1,5 @@
 package com.lincolnstewart.android.reachout.ui.reach
 
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModel
 import com.lincolnstewart.android.reachout.ContactRepository
 import com.lincolnstewart.android.reachout.model.Contact

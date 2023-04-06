@@ -1,5 +1,8 @@
 package com.lincolnstewart.android.reachout.ui.home
 
+import android.animation.ObjectAnimator
+import android.animation.ValueAnimator
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -46,6 +49,12 @@ class HomeFragment : Fragment() {
         startQuoteDisplay()
     }
 
+    override fun onResume() {
+        super.onResume()
+        setProgressBar()
+        setUserStats()
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         quoteCycleJob?.cancel()
@@ -90,6 +99,8 @@ class HomeFragment : Fragment() {
         quoteCycleJob = lifecycleScope.launch {
             delay(1250)
             while (true) {
+
+                //TODO: This will crash if the quotes haven't been retrieved in time
                 val quote = quotes[index % quotes.size]
                 binding.quotesTextView.text = """"${quote.quoteText}""""
                 binding.quoteAuthorView.text = "- ${quote.author}"
@@ -106,6 +117,81 @@ class HomeFragment : Fragment() {
                 index++
             }
         }
+    }
+
+    private fun setProgressBar() {
+        // Get views
+        val progressBar = binding.progressBar
+        val progressText = binding.xpTextView
+
+        // Get users current level progress
+        val totalUserXp = getUserXp()
+        val userCurrentLevel = viewModel.checkUserLevel(totalUserXp)
+        val minXpForLevel = viewModel.getMinXPForLevel(userCurrentLevel)
+        var currentLevelProgress = totalUserXp - minXpForLevel
+        Log.d(TAG, "Current Level Progress: $currentLevelProgress")
+
+        // Get required xp for next level
+        val maxXpForLevel = viewModel.getMaxXPForLevel(userCurrentLevel)
+        Log.d(TAG, "Max XP for level: $maxXpForLevel")
+
+        val actualNeededXp = maxXpForLevel - minXpForLevel
+
+        // If user has maxed out xp, set their progress to the max
+        if (currentLevelProgress > actualNeededXp) {
+            currentLevelProgress = actualNeededXp
+        }
+
+        // Set progress text
+        val builtProgressString = "$currentLevelProgress / $actualNeededXp"
+        progressText.text = builtProgressString
+
+        //  Set progress bar max value
+        progressBar.max = actualNeededXp
+
+
+        // Animate progress bar to user's current xp level
+        progressBar.progress = 0                                                                //THIS
+        val animator = ObjectAnimator.ofInt(progressBar, "progress", 0, currentLevelProgress)
+        animator.duration = 1000
+
+        val valueAnimator = ValueAnimator.ofFloat(0f, 1f)
+        valueAnimator.duration = 1000
+
+        // Set a listener to update the progress value as the animation progresses
+        valueAnimator.addUpdateListener {
+                                                        //THIS
+            val progress = (it.animatedValue as Float * currentLevelProgress).toInt()
+            progressBar.progress = progress
+        }
+
+        // Start both animators
+        animator.start()
+        valueAnimator.start()
+    }
+
+    private fun setUserStats() {
+        val userXp = getUserXp()
+        val userLevelCountView = binding.levelTextView
+
+        // TODO
+        val monthlyReachoutsCountView = binding.thisMonthTextView
+        val daysSinceLastCountView = binding.sinceLastTextView
+
+        val userLevel = viewModel.checkUserLevel(userXp)
+        val userLevelString = userLevel.toString()
+
+
+        userLevelCountView.text = userLevelString
+
+    }
+
+    private fun getUserXp() : Int {
+        //Get user's current xp
+        val sharedPreferences = context?.getSharedPreferences("StatPrefs", Context.MODE_PRIVATE)
+        val currentUserXp = sharedPreferences?.getString("user_xp", "0")
+        Log.d(TAG, "User XP Retrieved from StatPrefs: $currentUserXp")
+        return currentUserXp?.toInt() ?: 0
     }
 
 }

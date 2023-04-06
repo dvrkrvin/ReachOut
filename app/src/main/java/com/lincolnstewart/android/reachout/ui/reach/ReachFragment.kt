@@ -1,6 +1,7 @@
 package com.lincolnstewart.android.reachout.ui.reach
 
 import android.app.Activity.RESULT_OK
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -42,6 +43,8 @@ class ReachFragment : Fragment() {
         } else {
             Toast.makeText(context, "SMS sending failed", Toast.LENGTH_SHORT).show()
         }
+
+        awardXp(100)
     }
 
     private val makeCallLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -55,6 +58,8 @@ class ReachFragment : Fragment() {
         } else {
             Toast.makeText(context, "Call failed to start", Toast.LENGTH_SHORT).show()
         }
+
+        awardXp(100)
     }
 
     override fun onCreateView(
@@ -63,14 +68,6 @@ class ReachFragment : Fragment() {
     ): View {
         _binding = FragmentReachBinding.inflate(inflater, container, false)
         return binding.root
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-
-        // Cancel chooseRandomContact if user leaves fragment before the job is complete
-        crcJob?.cancel()
-        _binding = null
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -83,6 +80,14 @@ class ReachFragment : Fragment() {
             redirectForText()
         }
         initiateChallenge()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+
+        // Cancel chooseRandomContact if user leaves fragment before the job is complete
+        crcJob?.cancel()
+        _binding = null
     }
 
     private fun initiateChallenge() {
@@ -149,6 +154,23 @@ class ReachFragment : Fragment() {
         val intent = Intent(Intent.ACTION_SENDTO, uri)
 //            .apply { putExtra("sms_body", message) }
         sendSmsLauncher.launch(intent)
+    }
 
+    private fun awardXp(xpAmount: Int) {
+        //Get user's current xp
+        val sharedPreferences = context?.getSharedPreferences("StatPrefs", Context.MODE_PRIVATE)
+        val currentUserXp = sharedPreferences?.getString("user_xp", "0")
+
+        //Convert currentUserXp to Int
+        val currentXpInt = currentUserXp?.toInt()
+
+        //Add xpAmount to currentXpInt
+        val newXpInt = currentXpInt?.plus(xpAmount)
+
+        // Save new xp amount to shared prefs
+        val sharedPrefs = context?.getSharedPreferences("StatPrefs", Context.MODE_PRIVATE)
+        val editor = sharedPrefs?.edit()
+        editor?.putString("user_xp", newXpInt.toString())
+        editor?.apply()
     }
 }

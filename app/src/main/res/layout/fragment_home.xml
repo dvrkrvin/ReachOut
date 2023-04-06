@@ -51,7 +51,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="72dp"
-        android:text="0"
+        android:text="1"
         android:textSize="64sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
@@ -76,10 +76,11 @@
         android:layout_marginTop="72dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        android:max="1000"
         app:layout_constraintTop_toBottomOf="@+id/levelLabel" />
 
     <TextView
-        android:id="@+id/thisWeekLabel"
+        android:id="@+id/thisMonthLabel"
         android:layout_width="137dp"
         android:layout_height="18dp"
         android:text="reachouts this month"
@@ -87,10 +88,10 @@
         app:layout_constraintEnd_toStartOf="@+id/sinceLastLabel"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/thisWeekTextView" />
+        app:layout_constraintTop_toBottomOf="@+id/thisMonthTextView" />
 
     <TextView
-        android:id="@+id/thisWeekTextView"
+        android:id="@+id/thisMonthTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="0"
@@ -108,8 +109,8 @@
         android:text="days since last reach out"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/thisWeekLabel"
-        app:layout_constraintTop_toTopOf="@+id/thisWeekLabel" />
+        app:layout_constraintStart_toEndOf="@+id/thisMonthLabel"
+        app:layout_constraintTop_toTopOf="@+id/thisMonthLabel" />
 
     <TextView
         android:id="@+id/sinceLastTextView"
@@ -120,7 +121,7 @@
         android:textSize="56sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/thisWeekTextView"
+        app:layout_constraintStart_toEndOf="@+id/thisMonthTextView"
         app:layout_constraintTop_toBottomOf="@+id/progressBar" />
 
     <ImageView
