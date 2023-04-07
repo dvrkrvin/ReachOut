@@ -33,32 +33,11 @@ class ReachFragment : Fragment() {
     private val reachViewModel: ReachViewModel by viewModels()
     private var crcJob: Job? = null
 
-    private val sendSmsLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-        Log.d(TAG, "SMS Result: $result")
-        // This check always returns cancelled. May be emulator related.
-        if (result.resultCode == RESULT_OK) {
-            Toast.makeText(context, "SMS sent successfully", Toast.LENGTH_SHORT).show()
-            //TODO: Award xp
-
-        } else {
-            Toast.makeText(context, "SMS sending failed", Toast.LENGTH_SHORT).show()
-        }
-
+    private val sendSmsLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
         awardXp(100)
     }
 
-    private val makeCallLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-        println("Call Result: $result")
-
-        // This check always returns cancelled. May be emulator related.
-        if (result.resultCode == RESULT_OK) {
-            Toast.makeText(context, "Call started successfully", Toast.LENGTH_SHORT).show()
-            //TODO: Award xp
-
-        } else {
-            Toast.makeText(context, "Call failed to start", Toast.LENGTH_SHORT).show()
-        }
-
+    private val makeCallLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
         awardXp(100)
     }
 
@@ -102,6 +81,14 @@ class ReachFragment : Fragment() {
 
             reachViewModel.loadContacts().collect {
 
+                // If no contacts are found, show appropriate views
+                if (it.isEmpty()) {
+                    binding.noContactsFoundImage.visibility = View.VISIBLE
+                    binding.noContactsFoundText.visibility = View.VISIBLE
+                    binding.addContactHintText.visibility = View.VISIBLE
+                    return@collect
+                }
+
                 val fadeInAnimation = AnimationUtils.loadAnimation(context, R.anim.extra_long_fade_in)
                 binding.nameText.startAnimation(fadeInAnimation)
                 binding.nameText.visibility = View.VISIBLE
@@ -134,10 +121,12 @@ class ReachFragment : Fragment() {
 
     private fun showButtons() {
         val fadeInAnimation = AnimationUtils.loadAnimation(context, R.anim.medium_fade_in)
+        binding.xpIncentiveText.startAnimation(fadeInAnimation)
         binding.callButton.startAnimation(fadeInAnimation)
         binding.textButton.startAnimation(fadeInAnimation)
         binding.callButton.visibility = View.VISIBLE
         binding.textButton.visibility = View.VISIBLE
+        binding.xpIncentiveText.visibility = View.VISIBLE
     }
 
     private fun redirectForCall() {
