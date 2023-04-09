@@ -138,7 +138,8 @@ class ResourceChildTwoFragment : Fragment() {
         ) {
             Image(
                 painter = painterResource(id = R.drawable.baseline_play_arrow_24),
-                contentDescription = null
+                contentDescription = null,
+                alpha = 0.5f
             )
             Column {
                 Text(

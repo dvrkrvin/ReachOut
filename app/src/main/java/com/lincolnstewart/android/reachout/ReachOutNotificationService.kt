@@ -33,7 +33,7 @@ class ReachOutNotificationService(
             .setDestination(R.id.navigation_reach)
             .createPendingIntent()
         val notification = NotificationCompat.Builder(context, REACHOUT_CHANNEL_ID)
-            .setSmallIcon(R.drawable.ic_people)
+            .setSmallIcon(R.drawable.r_o_logo2)
             .setContentTitle("Reach Out")
             .setContentText("Let's reach out to $name")
             .setContentIntent(deepLink)
