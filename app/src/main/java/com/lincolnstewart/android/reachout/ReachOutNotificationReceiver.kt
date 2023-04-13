@@ -9,7 +9,6 @@ class ReachOutNotificationReceiver : BroadcastReceiver() {
 
     override fun onReceive(context: Context, intent: Intent?) {
         val service = ReachOutNotificationService(context)
-        service.showNotification("Ree")
+        service.showNotification()
     }
-
 }

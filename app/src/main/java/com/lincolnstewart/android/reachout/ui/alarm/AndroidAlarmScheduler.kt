@@ -24,9 +24,7 @@ class AndroidAlarmScheduler(
 
     // Get users preferred time from shared preferences and schedule a repeating alarm
     override fun schedule(item: AlarmItem) {
-        val intent = Intent(context, AlarmReceiver::class.java).apply {
-            putExtra("EXTRA_MESSAGE", item.message)
-        }
+        val intent = Intent(context, AlarmReceiver::class.java)
         intent.action = Intent.ACTION_VIEW
         val pendingIntent = PendingIntent.getBroadcast(
             context,

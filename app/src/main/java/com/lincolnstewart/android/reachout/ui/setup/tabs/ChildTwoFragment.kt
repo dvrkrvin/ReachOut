@@ -49,8 +49,8 @@ class ChildTwoFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         // For notification testing
-        val service = ReachOutNotificationService(requireContext())
-        service.scheduleNotifications(requireContext())
+//        val service = ReachOutNotificationService(requireContext())
+//        service.scheduleNotifications(requireContext())
 
         initializeSpinners()
 
@@ -181,7 +181,6 @@ class ChildTwoFragment : Fragment() {
         val scheduler = AndroidAlarmScheduler(requireContext())
         val alarmItem = AlarmItem(
             time = LocalDateTime.now(),
-            message = "a friend"
         )
         alarmItem.let(scheduler::schedule)
 

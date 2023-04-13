@@ -7,6 +7,7 @@ class HomeViewModel : ViewModel() {
 
     val quotes = mutableListOf<Quote>()
 
+    //region Leveling
     fun checkUserLevel(userXp: Int): Int {
         when (userXp) {
             in 0..199 -> {
@@ -140,4 +141,5 @@ class HomeViewModel : ViewModel() {
         }
         return -1
     }
+    //endregion
 }

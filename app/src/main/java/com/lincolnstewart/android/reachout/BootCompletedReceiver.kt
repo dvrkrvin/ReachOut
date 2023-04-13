@@ -15,11 +15,9 @@ class BootCompletedReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context?, intent: Intent?) {
         if(intent?.action == Intent.ACTION_BOOT_COMPLETED) {
             Log.d(TAG, "Device booted")
-            // TODO: Schedule notification alarm to default or users preferred time
             val scheduler = context?.let { AndroidAlarmScheduler(it) }
             val alarmItem = AlarmItem(
-                time = LocalDateTime.now(),
-                message = "a friend"
+                time = LocalDateTime.now()
             )
             scheduler!!::schedule.let { alarmItem.let(it) }
 

@@ -168,7 +168,14 @@ class ReachFragment : Fragment() {
         val editor = sharedPrefs?.edit()
 
         editor?.putLong("last_reachout_time", System.currentTimeMillis())
-        editor?.apply()
 
+        // Increment the monthly reachouts counter
+        val currentMonthlyReachouts = sharedPrefs?.getInt("monthly_reachouts", 0)
+        val newMonthlyReachouts = currentMonthlyReachouts?.plus(1)
+        if (newMonthlyReachouts != null) {
+            editor?.putInt("monthly_reachouts", newMonthlyReachouts)
+        }
+
+        editor?.apply()
     }
 }

@@ -63,8 +63,7 @@ class ReachOutApplication : Application() {
     private fun scheduleNotifications() {
         val scheduler = AndroidAlarmScheduler(this)
         val alarmItem = AlarmItem(
-            time = LocalDateTime.now(),
-            message = "a Friend"
+            time = LocalDateTime.now()
         )
         alarmItem.let(scheduler::schedule)
 

@@ -22,6 +22,7 @@ import com.lincolnstewart.android.reachout.model.Quote
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import java.util.*
 import java.util.concurrent.TimeUnit
 
 private const val TAG = "HomeFragment"
@@ -172,15 +173,32 @@ class HomeFragment : Fragment() {
     }
 
     private fun setUserStats() {
-        // Get stat views
+        manageUserLevel()
+        manageDaysSinceStat()
+        manageMonthlyStat()
+    }
+
+    private fun getUserXp() : Int {
+        //Get user's current xp
+        val sharedPreferences = context?.getSharedPreferences("StatPrefs", Context.MODE_PRIVATE)
+        val currentUserXp = sharedPreferences?.getString("user_xp", "0")
+        Log.d(TAG, "User XP Retrieved from StatPrefs: $currentUserXp")
+        return currentUserXp?.toInt() ?: 0
+    }
+
+    private fun manageUserLevel() {
+        // Get user's current level and set it to the view
         val userLevelCountView = binding.levelTextView
+        val userXp = getUserXp()
+        val userLevel = viewModel.checkUserLevel(userXp)
+        val userLevelString = userLevel.toString()
+        userLevelCountView.text = userLevelString
+    }
+
+    private fun manageDaysSinceStat() {
+        //Get user's last reachout time, calculate the difference, and set it in the view
         val daysSinceLastCountView = binding.sinceLastTextView
 
-        // TODO
-        val monthlyReachoutsCountView = binding.thisMonthTextView
-
-
-        //Get user's last reachout time, calculate the difference, and set it in the view
         val sharedPreferences = context?.getSharedPreferences("StatPrefs", Context.MODE_PRIVATE)
         val lastReachoutTime = sharedPreferences?.getLong("last_reachout_time", 0)
         if (lastReachoutTime == 0L) {
@@ -191,20 +209,30 @@ class HomeFragment : Fragment() {
             val daysSinceLastAction = TimeUnit.MILLISECONDS.toDays(timeSinceLastAction)
             daysSinceLastCountView.text = daysSinceLastAction.toString()
         }
-
-        // Get user's current level and set it to the view
-        val userXp = getUserXp()
-        val userLevel = viewModel.checkUserLevel(userXp)
-        val userLevelString = userLevel.toString()
-        userLevelCountView.text = userLevelString
     }
 
-    private fun getUserXp() : Int {
-        //Get user's current xp
+    private fun manageMonthlyStat() {
         val sharedPreferences = context?.getSharedPreferences("StatPrefs", Context.MODE_PRIVATE)
-        val currentUserXp = sharedPreferences?.getString("user_xp", "0")
-        Log.d(TAG, "User XP Retrieved from StatPrefs: $currentUserXp")
-        return currentUserXp?.toInt() ?: 0
+
+        // Get current month
+        val currentMonth = Calendar.getInstance().get(Calendar.MONTH)
+
+        // Get last month
+        val lastMonth = sharedPreferences?.getInt("last_month", 0)
+
+        // If the current month is different from the last month, reset the monthly reachout count
+        if (currentMonth != lastMonth) {
+            val editor = sharedPreferences?.edit()
+            editor?.putInt("last_month", currentMonth)
+            editor?.putInt("monthly_reachouts", 0)
+            editor?.apply()
+        }
+
+        // Get monthly reachout count and set to view
+        val monthlyReachoutsCountView = binding.thisMonthTextView
+
+        val monthlyReachouts = sharedPreferences?.getInt("monthly_reachouts", 0)
+        monthlyReachoutsCountView.text = monthlyReachouts.toString()
     }
 
 }

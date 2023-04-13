@@ -1,6 +1,5 @@
 package com.lincolnstewart.android.reachout.ui.alarm
 
-import android.app.NotificationManager
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -10,11 +9,10 @@ class AlarmReceiver: BroadcastReceiver() {
 
     override fun onReceive(context: Context, intent: Intent?) {
         if (intent?.action == Intent.ACTION_VIEW) {
-            val message = intent?.getStringExtra("EXTRA_MESSAGE") ?: return
-            println("Alarm triggered: $message")
+            println("Alarm triggered")
 
             val service = ReachOutNotificationService(context)
-            service.showNotification(message)
+            service.showNotification()
         } else {
             println("AlarmReceiver received but incorrect Intent.action")
         }
