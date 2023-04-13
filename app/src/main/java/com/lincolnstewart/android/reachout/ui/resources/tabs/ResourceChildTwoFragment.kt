@@ -69,9 +69,8 @@ class ResourceChildTwoFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        viewModel = ViewModelProvider(this).get(ResourceChildTwoViewModel::class.java)
-
         super.onViewCreated(view, savedInstanceState)
+        viewModel = ViewModelProvider(this).get(ResourceChildTwoViewModel::class.java)
 
 //        retrieveVideoLinks()
         setRecyclerViewContent()
@@ -80,31 +79,8 @@ class ResourceChildTwoFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
 
-        // Cancel chooseRandomContact if user leaves fragment before the job is complete
         videoJob?.cancel()
         _binding = null
-    }
-
-
-
-    // This function is not in use
-    suspend fun getWebPageMainImage(url: String): String? {
-        return withContext(Dispatchers.IO) {
-            val document: Document = Jsoup.connect(url).get()
-
-            val metaImage = document.select("meta[property=og:image]").attr("content")
-
-            if (metaImage.isNotEmpty()) {
-                metaImage
-            } else {
-                val images = document.select("img[src~=(?i)\\.(png|jpe?g|gif)]")
-                if (images.size > 0) {
-                    images[0].absUrl("src")
-                } else {
-                    null
-                }
-            }
-        }
     }
 
     private fun followLink(link: String, context: Context) {

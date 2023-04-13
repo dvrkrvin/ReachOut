@@ -10,7 +10,7 @@
     <TextView
         android:id="@+id/quotesTextView"
         android:layout_width="wrap_content"
-        android:layout_height="36dp"
+        android:layout_height="37dp"
         android:layout_marginTop="112dp"
         android:paddingHorizontal="40dp"
         android:text="{Cycling mental health quotes}"
@@ -64,8 +64,8 @@
         android:id="@+id/xpTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="48dp"
-        android:text="0/1000"
+        android:layout_marginEnd="40dp"
+        android:text="0/200"
         app:layout_constraintBottom_toTopOf="@+id/progressBar"
         app:layout_constraintEnd_toEndOf="parent" />
 
@@ -130,7 +130,7 @@
         android:layout_width="283dp"
         android:layout_height="161dp"
         android:layout_marginTop="64dp"
-        android:alpha=".05"
+        android:alpha=".1"
         android:src="@drawable/r_o_logo2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

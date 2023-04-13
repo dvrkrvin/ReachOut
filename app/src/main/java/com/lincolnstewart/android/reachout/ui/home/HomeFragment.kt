@@ -22,6 +22,7 @@ import com.lincolnstewart.android.reachout.model.Quote
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import java.util.concurrent.TimeUnit
 
 private const val TAG = "HomeFragment"
 
@@ -171,19 +172,31 @@ class HomeFragment : Fragment() {
     }
 
     private fun setUserStats() {
-        val userXp = getUserXp()
+        // Get stat views
         val userLevelCountView = binding.levelTextView
+        val daysSinceLastCountView = binding.sinceLastTextView
 
         // TODO
         val monthlyReachoutsCountView = binding.thisMonthTextView
-        val daysSinceLastCountView = binding.sinceLastTextView
 
+
+        //Get user's last reachout time, calculate the difference, and set it in the view
+        val sharedPreferences = context?.getSharedPreferences("StatPrefs", Context.MODE_PRIVATE)
+        val lastReachoutTime = sharedPreferences?.getLong("last_reachout_time", 0)
+        if (lastReachoutTime == 0L) {
+            daysSinceLastCountView.text = "0"
+        } else {
+            val currentTime = System.currentTimeMillis()
+            val timeSinceLastAction = currentTime - lastReachoutTime!!
+            val daysSinceLastAction = TimeUnit.MILLISECONDS.toDays(timeSinceLastAction)
+            daysSinceLastCountView.text = daysSinceLastAction.toString()
+        }
+
+        // Get user's current level and set it to the view
+        val userXp = getUserXp()
         val userLevel = viewModel.checkUserLevel(userXp)
         val userLevelString = userLevel.toString()
-
-
         userLevelCountView.text = userLevelString
-
     }
 
     private fun getUserXp() : Int {

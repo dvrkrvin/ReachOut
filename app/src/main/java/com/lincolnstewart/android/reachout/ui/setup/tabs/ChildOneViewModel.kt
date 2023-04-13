@@ -31,7 +31,6 @@ class ChildOneViewModel : ViewModel() {
             ContactsContract.Contacts._ID,
             ContactsContract.Contacts.DISPLAY_NAME,
             ContactsContract.Contacts.HAS_PHONE_NUMBER,
-//            ContactsContract.Contacts.PHOTO_THUMBNAIL_URI
         )
         val sortOrder = "${ContactsContract.Contacts.DISPLAY_NAME} ASC"
         val selection = "${ContactsContract.Contacts.HAS_PHONE_NUMBER} > 0"
@@ -48,7 +47,6 @@ class ChildOneViewModel : ViewModel() {
                     val contactId = cursor.getLong(cursor.getColumnIndex(ContactsContract.Contacts._ID))
                     val displayName = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME))
                     val hasPhoneNumber = cursor.getInt(cursor.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER))
-//                    val thumbnailUri = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.PHOTO_THUMBNAIL_URI))
 
                     if (hasPhoneNumber > 0) {
                         val phoneNumberProjection = arrayOf(ContactsContract.CommonDataKinds.Phone.NUMBER)

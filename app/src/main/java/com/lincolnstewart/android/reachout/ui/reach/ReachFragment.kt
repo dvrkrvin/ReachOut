@@ -1,18 +1,15 @@
 package com.lincolnstewart.android.reachout.ui.reach
 
-import android.app.Activity.RESULT_OK
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
-import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.lincolnstewart.android.reachout.R
@@ -22,6 +19,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.util.*
+
 
 private const val TAG = "ReachFragment"
 
@@ -35,6 +33,7 @@ class ReachFragment : Fragment() {
 
     private val sendSmsLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
         awardXp(100)
+        logAction()
     }
 
     private val makeCallLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
@@ -161,5 +160,15 @@ class ReachFragment : Fragment() {
         val editor = sharedPrefs?.edit()
         editor?.putString("user_xp", newXpInt.toString())
         editor?.apply()
+    }
+
+    private fun logAction() {
+        // Save the current time in SharedPreferences when the user performs the action
+        val sharedPrefs = context?.getSharedPreferences("StatPrefs", Context.MODE_PRIVATE)
+        val editor = sharedPrefs?.edit()
+
+        editor?.putLong("last_reachout_time", System.currentTimeMillis())
+        editor?.apply()
+
     }
 }

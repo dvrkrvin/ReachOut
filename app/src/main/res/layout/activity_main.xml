@@ -6,7 +6,21 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity">
-    
+
+<!--    TODO: Fix this hardcoded spacing-->
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="match_parent"
+        android:layout_height="72dp"
+        android:background="@drawable/blue_red_grad_2"
+        android:text="Give Help                                                         Get Help"
+        android:textColor="@color/white"
+        android:alpha=".7"
+        android:paddingHorizontal="64dp"
+        android:textSize="12sp"
+        app:layout_anchor="@+id/fab"
+        app:layout_anchorGravity="bottom|center" />
+
     <com.google.android.material.bottomappbar.BottomAppBar
         android:id="@+id/bottomAppBar"
         android:layout_width="match_parent"
@@ -35,7 +49,8 @@
         app:maxImageSize="40dp"
         app:rippleColor="@color/purple_200"
         app:layout_anchor="@id/bottomAppBar"
-        app:borderWidth="0dp"
+        app:borderWidth="2dp"
+        app:backgroundTint="@color/light_grey_100"
         app:tint="@null" />
 
     <fragment
@@ -49,5 +64,6 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:navGraph="@navigation/mobile_navigation" />
+
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
