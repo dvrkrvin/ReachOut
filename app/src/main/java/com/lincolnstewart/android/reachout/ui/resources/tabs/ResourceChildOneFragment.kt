@@ -40,7 +40,7 @@ import java.util.*
 
 const val TAG = "ResourceChildOneFragment"
 
-// Helpful articles tab
+// Resources "Read" tab
 class ResourceChildOneFragment : Fragment() {
 
     companion object {
@@ -82,12 +82,17 @@ class ResourceChildOneFragment : Fragment() {
     }
 
     private fun setRecyclerViewContent() {
-        Log.d(TAG, appContext.cachedArticles.toString())
         val composeView = requireView().findViewById<ComposeView>(R.id.video_compose_view)
-        composeView?.setContent { RecyclerView(appContext.cachedArticles) }
+        val cachedArticles = appContext.cachedArticles
+
+        if (cachedArticles.isNotEmpty()) {
+            composeView?.setContent { RecyclerView(cachedArticles) }
+        } else {
+            // Show network error
+            binding.networkErrorLayout.visibility = View.VISIBLE
+        }
     }
 
-    // This function is not in use
 //    suspend fun getWebPageMainImage(url: String): String? {
 //        return withContext(Dispatchers.IO) {
 //            val document: Document = Jsoup.connect(url).get()

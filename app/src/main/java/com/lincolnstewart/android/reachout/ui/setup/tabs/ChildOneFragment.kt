@@ -174,10 +174,8 @@ class ChildOneFragment : Fragment() {
 
         val composeView = requireView().findViewById<ComposeView>(R.id.compose_view)
         lifecycleScope.launch {
-//            val contacts = withContext(Dispatchers.IO) {
                 childOneViewModel.loadContacts().collect { contacts ->
                     val alphabetizedContacts = contacts.sortedBy { it.displayName[0].uppercaseChar() }
-//                    Log.d(TAG, "Alpha'd contacts loaded from rooms: $alphabetizedContacts")
                     composeView.setContent { RecyclerView(alphabetizedContacts, childOneViewModel.selectedContacts) }
 
                 }

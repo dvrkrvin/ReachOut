@@ -98,27 +98,36 @@ class HomeFragment : Fragment() {
         val quotes = viewModel.quotes
         var index = 0
 
-        quoteCycleJob = lifecycleScope.launch {
-            delay(1250)
-            while (true) {
-
-                //TODO: This will crash if the quotes haven't been retrieved in time
-                val quote = quotes[index % quotes.size]
-                binding.quotesTextView.text = """"${quote.quoteText}""""
-                binding.quoteAuthorView.text = "- ${quote.author}"
-                binding.quotesTextView.startAnimation(fadeInAnim)
-                binding.quoteAuthorView.startAnimation(fadeInAnim)
-                binding.quotesTextView.visibility = View.VISIBLE
-                binding.quoteAuthorView.visibility = View.VISIBLE
-                delay(7000)
-                binding.quotesTextView.startAnimation(fadeOutAnim)
-                binding.quoteAuthorView.startAnimation(fadeOutAnim)
-                binding.quotesTextView.visibility = View.INVISIBLE
-                binding.quoteAuthorView.visibility = View.INVISIBLE
+        if (quotes.isNotEmpty()) {
+            quoteCycleJob = lifecycleScope.launch {
                 delay(1250)
-                index++
+                while (true) {
+
+                    //TODO: This will crash if the quotes haven't been retrieved in time
+                    val quote = quotes[index % quotes.size]
+                    binding.quotesTextView.text = """"${quote.quoteText}""""
+                    binding.quoteAuthorView.text = "- ${quote.author}"
+                    binding.quotesTextView.startAnimation(fadeInAnim)
+                    binding.quoteAuthorView.startAnimation(fadeInAnim)
+                    binding.quotesTextView.visibility = View.VISIBLE
+                    binding.quoteAuthorView.visibility = View.VISIBLE
+                    delay(7000)
+                    binding.quotesTextView.startAnimation(fadeOutAnim)
+                    binding.quoteAuthorView.startAnimation(fadeOutAnim)
+                    binding.quotesTextView.visibility = View.INVISIBLE
+                    binding.quoteAuthorView.visibility = View.INVISIBLE
+                    delay(1250)
+                    index++
+                }
             }
+        } else {
+            // Unable to retrieve quotes, show static quote
+            binding.quotesTextView.text = """"No act of kindness, no matter how small, is ever wasted.""""
+            binding.quoteAuthorView.text = "- Aesop"
+            binding.quotesTextView.visibility = View.VISIBLE
+            binding.quoteAuthorView.visibility = View.VISIBLE
         }
+
     }
 
     private fun setProgressBar() {

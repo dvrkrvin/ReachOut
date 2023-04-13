@@ -90,7 +90,13 @@ class ResourceChildTwoFragment : Fragment() {
 
     private fun setRecyclerViewContent() {
         val composeView = requireView().findViewById<ComposeView>(R.id.video_compose_view)
-        composeView.setContent { RecyclerView(appContext.cachedVideos) }
+        val cachedVideos = appContext.cachedVideos
+
+        if (cachedVideos.isNotEmpty()) {
+            composeView.setContent { RecyclerView(cachedVideos) }
+        } else {
+            binding.networkErrorLayout.visibility = View.VISIBLE
+        }
     }
 
     @Composable
