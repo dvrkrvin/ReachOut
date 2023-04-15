@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -93,17 +94,37 @@ class ReachFragment : Fragment() {
                 binding.nameText.visibility = View.VISIBLE
                 val nameText = binding.nameText
 
+                val sharedPrefs = context?.getSharedPreferences("StatPrefs", Context.MODE_PRIVATE)
+                val lastReachedContact = sharedPrefs?.getString("last_reached_contact", null)
+//                Log.d(TAG, "Last reached contact: $lastReachedContact")
+
                 var selectedContact: Contact? = null
                 val random = Random()
-                for (i in 0 until 25) { // browse over 25 contacts before stopping
+
+                for (i in 0 until 30) { // browse over 30 contacts before stopping
                     selectedContact = it[random.nextInt(it.size)]
+
+                    // If the selected contact is the same as the last reached contact, select the next contact
+                    if (selectedContact.displayName == lastReachedContact) {
+                        var nextIndex = it.indexOf(selectedContact) + 1
+                        if (nextIndex >= it.size) {
+                            nextIndex = 0
+                        }
+                        selectedContact = it[nextIndex]
+                    }
+
                     nameText.text = selectedContact.displayName
-                    delay(75) // delay of 75 milliseconds for visibility
+                    delay(100) // delay of 75 milliseconds for visibility
                 }
-                println("Selected Contact: $selectedContact")
+
                 if (selectedContact != null) {
+//                    Log.d(TAG, "Selected Contact: ${selectedContact.displayName}")
                     reachViewModel.setSelectedPhoneNumber(selectedContact.number)
+                    val editor = sharedPrefs?.edit()
+                    editor?.putString("last_reached_contact", selectedContact.displayName)
+                    editor?.apply()
                 }
+
                 delay(500)
                 showCallToAction()
                 delay(750)

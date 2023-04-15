@@ -98,35 +98,35 @@ class HomeFragment : Fragment() {
         val quotes = viewModel.quotes
         var index = 0
 
-        if (quotes.isNotEmpty()) {
             quoteCycleJob = lifecycleScope.launch {
                 delay(1250)
-                while (true) {
-
-                    //TODO: This will crash if the quotes haven't been retrieved in time
-                    val quote = quotes[index % quotes.size]
-                    binding.quotesTextView.text = """"${quote.quoteText}""""
-                    binding.quoteAuthorView.text = "- ${quote.author}"
+                if (quotes.isNotEmpty()) {
+                    while (true) {
+                        val quote = quotes[index % quotes.size]
+                        binding.quotesTextView.text = """"${quote.quoteText}""""
+                        binding.quoteAuthorView.text = "- ${quote.author}"
+                        binding.quotesTextView.startAnimation(fadeInAnim)
+                        binding.quoteAuthorView.startAnimation(fadeInAnim)
+                        binding.quotesTextView.visibility = View.VISIBLE
+                        binding.quoteAuthorView.visibility = View.VISIBLE
+                        delay(7000)
+                        binding.quotesTextView.startAnimation(fadeOutAnim)
+                        binding.quoteAuthorView.startAnimation(fadeOutAnim)
+                        binding.quotesTextView.visibility = View.INVISIBLE
+                        binding.quoteAuthorView.visibility = View.INVISIBLE
+                        delay(1250)
+                        index++
+                    }
+                } else {
+                    // Unable to retrieve quotes, show static quote
+                    binding.quotesTextView.text = """"No act of kindness, no matter how small, is ever wasted.""""
+                    binding.quoteAuthorView.text = "- Aesop"
                     binding.quotesTextView.startAnimation(fadeInAnim)
                     binding.quoteAuthorView.startAnimation(fadeInAnim)
                     binding.quotesTextView.visibility = View.VISIBLE
                     binding.quoteAuthorView.visibility = View.VISIBLE
-                    delay(7000)
-                    binding.quotesTextView.startAnimation(fadeOutAnim)
-                    binding.quoteAuthorView.startAnimation(fadeOutAnim)
-                    binding.quotesTextView.visibility = View.INVISIBLE
-                    binding.quoteAuthorView.visibility = View.INVISIBLE
-                    delay(1250)
-                    index++
                 }
             }
-        } else {
-            // Unable to retrieve quotes, show static quote
-            binding.quotesTextView.text = """"No act of kindness, no matter how small, is ever wasted.""""
-            binding.quoteAuthorView.text = "- Aesop"
-            binding.quotesTextView.visibility = View.VISIBLE
-            binding.quoteAuthorView.visibility = View.VISIBLE
-        }
 
     }
 
@@ -209,12 +209,12 @@ class HomeFragment : Fragment() {
         val daysSinceLastCountView = binding.sinceLastTextView
 
         val sharedPreferences = context?.getSharedPreferences("StatPrefs", Context.MODE_PRIVATE)
-        val lastReachoutTime = sharedPreferences?.getLong("last_reachout_time", 0)
+        val lastReachoutTime = sharedPreferences?.getLong("last_reachout_time", 0) ?: 0L
         if (lastReachoutTime == 0L) {
             daysSinceLastCountView.text = "0"
         } else {
             val currentTime = System.currentTimeMillis()
-            val timeSinceLastAction = currentTime - lastReachoutTime!!
+            val timeSinceLastAction = currentTime - lastReachoutTime
             val daysSinceLastAction = TimeUnit.MILLISECONDS.toDays(timeSinceLastAction)
             daysSinceLastCountView.text = daysSinceLastAction.toString()
         }

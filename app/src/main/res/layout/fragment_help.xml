@@ -60,5 +60,17 @@
         app:layout_constraintBottom_toTopOf="@+id/textButton"
         app:layout_constraintStart_toStartOf="@+id/textButton" />
 
+    <ImageView
+        android:id="@+id/emergencyWatermark"
+        android:layout_width="399dp"
+        android:layout_height="291dp"
+        android:layout_marginBottom="104dp"
+        android:alpha=".1"
+        android:src="@drawable/ic_emergency"
+        app:layout_constraintBottom_toTopOf="@+id/callButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:tint="@color/reach_red" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -9,7 +9,8 @@
     <androidx.compose.ui.platform.ComposeView
         android:id="@+id/video_compose_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:layout_marginBottom="16dp"/>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/networkErrorLayout"

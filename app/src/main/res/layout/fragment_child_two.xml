@@ -11,6 +11,7 @@
         android:id="@+id/selectedTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="30dp"
         android:hint="12:00 PM"
         android:textSize="48sp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -80,5 +81,28 @@
         app:layout_constraintEnd_toStartOf="@+id/frequency_spinner"
         app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/autosaveHint"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginBottom="48dp"
+        android:text="Changes are saved automatically"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toTopOf="@+id/repeatTextView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <ImageView
+        android:id="@+id/infoIcon"
+        android:layout_width="18dp"
+        android:layout_height="18dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="48dp"
+        android:alpha=".4"
+        android:src="@drawable/baseline_info_24"
+        app:layout_constraintBottom_toTopOf="@+id/repeatTextView"
+        app:layout_constraintEnd_toStartOf="@+id/autosaveHint" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
