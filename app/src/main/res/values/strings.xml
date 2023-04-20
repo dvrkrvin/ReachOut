@@ -8,6 +8,38 @@
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
     <string name="title_add_contact">Add Contact</string>
+
+    <!--    Headers-->
+    <string name="header_add_contact">Add Contact</string>
+    <string name="header_repeat">Repeat</string>
+    <string name="header_at">at</string>
+    <string name="header_on">on</string>
+    <string name="header_crisis_number">988</string>
+    <string name="header_crisis_text">Suicide and Crisis Lifeline</string>
+    <string name="header_article_error">Unable to retrieve articles.</string>
+    <string name="header_check_network">Please check your network connection.</string>
+    <string name="header_video_error">Unable to retrieve videos.</string>
+
+    <!--    Hints-->
+    <string name="hint_contact_name">Name</string>
+    <string name="hint_phone_number">Phone Number</string>
+    <string name="hint_default_time">12:00 PM</string>
+    <string name ="hint_auto_save">Changes are saved automatically</string>
+
+    <!--    Labels-->
+    <string name="label_save_button">Save</string>
+    <string name="label_text_button">Text</string>
+    <string name="label_call_button">Call</string>
+    <string name="label_level">Level</string>
+    <string name="label_monthly_reachouts">reachouts this month</string>
+    <string name="label_days_since">days since last reach out</string>
+
+    <!--    Placeholders-->
+    <string name="placeholder_level_number">1</string>
+    <string name="placeholder_xp_count">0/200</string>
+    <string name="placeholder_zero">0</string>
+
+    <!--Arrays-->
     <string-array name="frequency_options">
         <item>Weekly</item>
         <item>Bi-Weekly</item>
@@ -21,6 +53,8 @@
         <item>Saturday</item>
         <item>Sunday</item>
     </string-array>
+
+    <!--    Deep Links-->
     <string name="my_fragment_deep_link">com.lincolnstewart.android.reachout.ui.reach</string>
 
 </resources>

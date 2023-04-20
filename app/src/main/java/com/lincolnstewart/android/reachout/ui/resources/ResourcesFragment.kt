@@ -80,7 +80,6 @@ class ResourcesFragment : Fragment(R.layout.fragment_resources) {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this).get(ResourcesViewModel::class.java)
-        // TODO: Use the ViewModel
     }
 }
 

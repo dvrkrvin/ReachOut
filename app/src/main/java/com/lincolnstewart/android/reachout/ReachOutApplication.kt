@@ -37,7 +37,6 @@ class ReachOutApplication : Application() {
 
         ContactRepository.initialize(this)
 
-        // TODO: Why are we scheduling notifications here?
         createNotificationChannel()
         scheduleNotifications()
 
@@ -70,7 +69,6 @@ class ReachOutApplication : Application() {
         Log.d(TAG, "Alarm Scheduled")
     }
 
-    // TODO: If I have time, this code should be in a separate class.
     //region Network Calls
     // Network call to retrieve and cache article links from Firebase
     private fun retrieveArticleLinks(){

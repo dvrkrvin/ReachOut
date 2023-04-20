@@ -47,7 +47,7 @@
         android:id="@+id/callToActionText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="136dp"
+        android:layout_marginTop="112dp"
         android:text="Let's Reach Out to"
         android:textSize="24sp"
         android:visibility="invisible"
@@ -59,7 +59,7 @@
         android:id="@+id/nameText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="56dp"
+        android:layout_marginTop="112dp"
         android:text="{Name}"
         android:textSize="40sp"
         android:visibility="invisible"
@@ -71,11 +71,11 @@
         android:id="@+id/xpIncentiveText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="156dp"
+        android:layout_marginTop="140dp"
+        android:alpha=".7"
         android:text="+100 xp"
         android:textSize="18sp"
         android:visibility="invisible"
-        android:alpha=".7"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/nameText" />
@@ -84,7 +84,7 @@
         android:id="@+id/textButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="173dp"
+        android:layout_marginBottom="156dp"
         android:paddingHorizontal="72dp"
         android:paddingVertical="16dp"
         android:text="Text"
@@ -108,5 +108,17 @@
         app:cornerRadius="12dp"
         app:layout_constraintBottom_toTopOf="@+id/textButton"
         app:layout_constraintEnd_toEndOf="@+id/textButton" />
+
+    <ImageView
+        android:id="@+id/imageView3"
+        android:layout_width="283dp"
+        android:layout_height="161dp"
+        android:layout_marginTop="204dp"
+        android:alpha=".1"
+        android:src="@drawable/r_o_logo2"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

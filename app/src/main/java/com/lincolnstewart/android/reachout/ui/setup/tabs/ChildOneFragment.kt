@@ -284,7 +284,6 @@ class ChildOneFragment : Fragment() {
     @Composable
     fun RecyclerView(contacts: List<Contact>, selectedContacts: MutableMap<UUID, Boolean>) {
         LazyColumn(modifier = Modifier.padding(vertical = 0.dp)) {
-            // TODO: Move this to view model
             val grouped = contacts.groupBy { it.displayName[0].uppercaseChar() }
 
             grouped.forEach { (initial, contacts) ->
@@ -338,7 +337,7 @@ class ChildOneFragment : Fragment() {
         Box(
             modifier = Modifier
                 .background(Color.LightGray)
-                .padding(vertical = 2.dp, horizontal = 16.dp)
+                .padding(vertical = 1.dp, horizontal = 16.dp)
                 .fillMaxWidth()
         ) {
             Text(
@@ -356,29 +355,3 @@ class ChildOneFragment : Fragment() {
     }
     //endregion
 }
-
-// List item from tutorial, holding onto for reference
-//    @Composable
-//    fun ListItem(name: String) {
-//        Surface(color = MaterialTheme.colors.primary,
-//        modifier = Modifier.padding(vertical = 2.dp, horizontal = 0.dp)) {
-//            Column(modifier = Modifier
-//                .padding(20.dp)
-//                .fillMaxWidth()) {
-//                Row {
-//                    Column(
-//                        modifier = Modifier
-//                            .weight(1f)
-//                    ) {
-//                        Text(text = "Course")
-//                        Text(text = name, style = MaterialTheme.typography.h4.copy(
-//                            fontWeight = FontWeight.ExtraBold
-//                        ))
-//                    }
-//                    OutlinedButton(onClick = { showToast(name)}) {
-//                        Text(text = "Show more")
-//                    }
-//                }
-//            }
-//        }
-//    }

@@ -91,6 +91,8 @@ class ReachFragment : Fragment() {
 
                 val fadeInAnimation = AnimationUtils.loadAnimation(context, R.anim.extra_long_fade_in)
                 binding.nameText.startAnimation(fadeInAnimation)
+                binding.imageView3.startAnimation(fadeInAnimation)
+                binding.imageView3.visibility = View.VISIBLE
                 binding.nameText.visibility = View.VISIBLE
                 val nameText = binding.nameText
 
@@ -114,7 +116,8 @@ class ReachFragment : Fragment() {
                     }
 
                     nameText.text = selectedContact.displayName
-                    delay(100) // delay of 75 milliseconds for visibility
+                    // Delay for visibility
+                    delay(100)
                 }
 
                 if (selectedContact != null) {

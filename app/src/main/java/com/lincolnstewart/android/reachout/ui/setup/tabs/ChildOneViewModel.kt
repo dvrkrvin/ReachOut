@@ -17,9 +17,7 @@ private const val TAG = "ChildOneViewModel"
 class ChildOneViewModel : ViewModel() {
     private val contactRepository = ContactRepository.get()
 
-    //TODO: Fix application crashing if Contact has an empty data member
-
-    var importedContacts = mutableListOf<Contact>()
+//    var importedContacts = mutableListOf<Contact>()
 
     val selectedContacts = mutableMapOf<UUID, Boolean>()
 

@@ -62,7 +62,6 @@ class SetupFragment : Fragment(R.layout.fragment_setup) {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this).get(SetupViewModel::class.java)
-        // TODO: Use the ViewModel
     }
 
 }
