@@ -15,6 +15,11 @@ class ResourceChildThreeViewModel : ViewModel() {
         "Anger management",
         "Suicide prevention",
         "Misophonia treatment",
-        "Mental health resources"
+        "Mental health resources",
+        "Eating disorder treatment",
+        "ADHD counseling",
+        "Grief and loss counseling",
+        "Stress management",
+        "Sleep disorder treatment"
     )
 }
