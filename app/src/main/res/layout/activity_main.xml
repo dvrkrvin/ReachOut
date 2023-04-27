@@ -7,19 +7,36 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-<!--    TODO: Fix this hardcoded spacing-->
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/tabLabelBackground"
         android:layout_width="match_parent"
         android:layout_height="72dp"
         android:background="@drawable/blue_red_grad_2"
-        android:text="Give Help                                                         Get Help"
-        android:textColor="@color/white"
         android:alpha=".7"
-        android:paddingHorizontal="64dp"
-        android:textSize="12sp"
         app:layout_anchor="@+id/fab"
         app:layout_anchorGravity="bottom|center" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Give Help"
+        android:textColor="@color/white"
+        android:textSize="12sp"
+        app:layout_anchor="@+id/tabLabelBackground"
+        android:paddingTop="16dp"
+        android:paddingStart="64dp"
+        app:layout_anchorGravity="start|top" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Get Help"
+        android:textColor="@color/white"
+        android:textSize="12sp"
+        app:layout_anchor="@+id/tabLabelBackground"
+        android:paddingTop="16dp"
+        android:paddingEnd="64dp"
+        app:layout_anchorGravity="end|top" />
 
     <com.google.android.material.bottomappbar.BottomAppBar
         android:id="@+id/bottomAppBar"

@@ -60,7 +60,7 @@ class AddContactFragment : Fragment() {
             // Add the contact
             viewModel.addContact(newContact)
 
-            // Confirmation toast or similar
+            // Confirmation toast
             Toast.makeText(binding.root.context, "Contact Added", Toast.LENGTH_SHORT).show()
 
             // Dismiss this fragment
@@ -69,36 +69,4 @@ class AddContactFragment : Fragment() {
             Toast.makeText(binding.root.context, "All fields are required", Toast.LENGTH_SHORT).show()
         }
     }
-
-//    @Composable
-//    fun CreateContactForm() {
-//
-//        var firstName by remember { mutableStateOf("") }
-//        var lastName by remember { mutableStateOf("") }
-//        var phoneNumber by remember { mutableStateOf("") }
-//
-//        Column(Modifier.padding(16.dp)) {
-//            OutlinedTextField(
-//                value = firstName,
-//                onValueChange = { firstName = it },
-//                label = { Text("First Name") }
-//            )
-//            OutlinedTextField(
-//                value = lastName,
-//                onValueChange = { lastName = it },
-//                label = { Text("Last Name") }
-//            )
-//            OutlinedTextField(
-//                value = phoneNumber,
-//                onValueChange = { phoneNumber = it },
-//                label = { Text("Phone Number") }
-//            )
-//            Button(onClick = {
-//                // Handle form submission
-//            }) {
-//                Text("Submit")
-//            }
-//        }
-//    }
-
 }

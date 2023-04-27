@@ -71,16 +71,10 @@ class MainActivity : AppCompatActivity() {
 
     private fun reachOut() {
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottomNavigationView)
-//        bottomNavigationView.clearCheck()
         bottomNavigationView.menu.findItem(R.id.navigation_reach)?.isChecked = true
 
         val menuItem = bottomNavigationView.menu.findItem(R.id.navigation_reach)
         Log.d(TAG, "Reach Out MenuItem: $menuItem")
-        // For slide up animation
-//        val options = NavOptions.Builder()
-//            .setEnterAnim(R.anim.slide_up)
-//            .build()
-//        navController.navigate(R.id.navigation_reach, null, options)
 
         navController.navigate(R.id.navigation_reach)
     }

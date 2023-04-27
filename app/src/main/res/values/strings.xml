@@ -30,7 +30,7 @@
     <string name="label_save_button">Save</string>
     <string name="label_text_button">Text</string>
     <string name="label_call_button">Call</string>
-    <string name="label_level">Level</string>
+    <string name="label_level">Lv.</string>
     <string name="label_monthly_reachouts">reachouts this month</string>
     <string name="label_days_since">days since last reach out</string>
 

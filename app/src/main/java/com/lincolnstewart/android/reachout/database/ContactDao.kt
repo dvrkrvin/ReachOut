@@ -21,6 +21,4 @@ interface ContactDao {
     @Query("DELETE FROM contact WHERE id IN (:idList)")
     suspend fun deleteContactsById(idList: List<UUID>)
 
-//    @Query("SELECT * FROM crime WHERE id=(:id)")
-//    suspend fun getCrime(id: UUID): Crime
 }

@@ -57,9 +57,7 @@ class ChildTwoFragment : Fragment() {
         binding.selectedTime.setOnClickListener {
             initializeTimePicker()
         }
-
         setInitialValues()
-
     }
 
     // For testing purposes
@@ -176,7 +174,6 @@ class ChildTwoFragment : Fragment() {
         timePickerDialog.show()
     }
 
-    // TODO: Move this to the view-model
     private fun scheduleAlarm() {
         val scheduler = AndroidAlarmScheduler(requireContext())
         val alarmItem = AlarmItem(
@@ -191,7 +188,7 @@ class ChildTwoFragment : Fragment() {
     private fun setInitialValues() {
         val sharedPreferences = context?.getSharedPreferences("ReminderPrefs", MODE_PRIVATE)
 
-        // Set time hint and //TODO: initial value
+        // Set time hint
         val timeString = sharedPreferences?.getString("selected_time", "")
         Log.d(TAG, "Time string: $timeString")
         if (timeString != null) {
@@ -205,8 +202,8 @@ class ChildTwoFragment : Fragment() {
         val dayString = sharedPreferences?.getString("selected_day", "")
         if (freqString != null && dayString != null) {
             if (freqString.isNotEmpty() && dayString.isNotEmpty()) {
-                val freqInt = freqStringToSpinnerInt(freqString)
-                val dayInt = dayStringToSpinnerInt(dayString)
+                val freqInt = viewModel.freqStringToSpinnerInt(freqString)
+                val dayInt = viewModel.dayStringToSpinnerInt(dayString)
 
                 binding.frequencySpinner.setSelection(freqInt)
                 binding.daySpinner.setSelection(dayInt)
@@ -214,24 +211,5 @@ class ChildTwoFragment : Fragment() {
         }
     }
 
-    private fun freqStringToSpinnerInt (frequencyString: String) : Int{
-        when (frequencyString) {
-            "Weekly" -> return 0
-            "Bi-Weekly" -> return 1
-        }
-        return -1
-    }
 
-    private fun dayStringToSpinnerInt (dayString: String) : Int{
-        when (dayString) {
-            "Monday" -> return 0
-            "Tuesday" -> return 1
-            "Wednesday" -> return 2
-            "Thursday" -> return 3
-            "Friday" -> return 4
-            "Saturday" -> return 5
-            "Sunday" -> return 6
-        }
-        return -1
-    }
 }

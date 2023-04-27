@@ -197,8 +197,6 @@ class ChildOneFragment : Fragment() {
 
     private fun onRemoveContactFabClicked() {
 
-//        Log.d(TAG, "Selected Contacts: $childOneViewModel.selectedContacts")
-
         lifecycleScope.launch{
             // Remove contacts
             val currentlySelectedContacts = childOneViewModel.selectedContacts.filter { it.value }.keys.toList()

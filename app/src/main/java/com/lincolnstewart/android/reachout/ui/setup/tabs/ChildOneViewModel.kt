@@ -17,8 +17,6 @@ private const val TAG = "ChildOneViewModel"
 class ChildOneViewModel : ViewModel() {
     private val contactRepository = ContactRepository.get()
 
-//    var importedContacts = mutableListOf<Contact>()
-
     val selectedContacts = mutableMapOf<UUID, Boolean>()
 
     // Read contacts from users native contacts list

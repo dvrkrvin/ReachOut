@@ -33,8 +33,6 @@ class ContactRepository private constructor(context: Context) {
         database.contactDao().deleteContactsById(selectedContactUUIDList)
     }
 
-//    suspend fun getContact(id: UUID): Crime = database.crimeDao().getCrime(id)
-
     companion object {
         private var INSTANCE: ContactRepository? =  null
 
