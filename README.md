@@ -1,6 +1,6 @@
 # ReachOut
 
-A mental health focused application with the primary intention of encouraging users to reach out to their friends and family.
+A comprehensive, Android-based, mental health focused application with the primary intention of reminding and encouraging users to check up on their friends and family.
 
 ### Features
 
