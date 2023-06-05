@@ -10,7 +10,7 @@
     <TextView
         android:id="@+id/quotesTextView"
         android:layout_width="wrap_content"
-        android:layout_height="40dp"
+        android:layout_height="48dp"
         android:layout_marginTop="112dp"
         android:paddingHorizontal="40dp"
         android:textAlignment="center"
@@ -62,20 +62,21 @@
         android:id="@+id/xpTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="40dp"
         android:text="@string/placeholder_xp_count"
         app:layout_constraintBottom_toTopOf="@+id/progressBar"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="@+id/progressBar" />
 
     <ProgressBar
         android:id="@+id/progressBar"
         style="?android:attr/progressBarStyleHorizontal"
-        android:layout_width="323dp"
+        android:layout_width="0dp"
         android:layout_height="12dp"
+        android:layout_marginStart="24dp"
         android:layout_marginTop="72dp"
+        android:layout_marginEnd="24dp"
+        android:max="1000"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:max="1000"
         app:layout_constraintTop_toBottomOf="@+id/levelLabel" />
 
     <TextView
